@@ -1,0 +1,450 @@
+---
+title: "Handful of Pixels"
+author: "Koen Hufkens"
+
+title-slide-attributes:
+    data-background-color: "blue"
+
+format: 
+  revealjs:
+    background-transition: fade
+---
+
+## Outline {background-color="aquamarine"}
+
+::: {.incremental}
+- Geospatial processing
+  - reading data
+  - finding data
+- Phenology modelling
+  - first principles
+:::
+
+::: {.notes}
+This workshop leans on r packages written for the community by BlueGreen Labs, as well as a course designed to understand and manipulate geospatial data, as taught at the University of Bern.
+:::
+
+## Geospatial processing in R
+
+Key libraries
+
+- `{terra}` (replacing `{raster}`)
+- `{sf}`
+
+::: {.notes}
+Two main libraries underpin geospatial processing in R (for the most part). This is the terra library for raster data and the sf library for vector data.
+:::
+
+## Data types
+
+- raster
+- vector
+
+Insert image
+
+::: {.notes}
+Data types use discrete locations (pixels) or vectors to define regions. I will focus on raster data for the most part, as this is more common when scaling results.
+:::
+
+## Manipulating raster data
+
+First we load the required `{terra}` library
+
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+
+# comment
+library(terra)
+```
+
+## Reading raster data
+
+First we load the required `{terra}` library
+
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+
+# comment
+r <- rast("")
+```
+
+## Band math
+
+First we load the required `{terra}` library
+
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+#| code-line-numbers: "|2"
+
+# comment
+library(terra)
+```
+
+## Masking values
+
+First we load the required `{terra}` library
+
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+#| code-line-numbers: "|2"
+
+# comment
+library(terra)
+```
+
+## Finding geospatial data
+
+- How to find / access geospatial data?
+  - Application Programme Interfaces (APIs)
+  - bulk download
+  - STAC
+- Consider the source
+
+::: {.notes}
+Finding and wrangling data is often the most time intensive part of an analysis. 80% + of your time will cover all aspects of data manipulation and exploration. You can use all the help you can get, and using these tools will speed things up and free time for creative work.
+:::
+
+## APIs
+
+I will focus on two APIs `{MODISTools}` and `{appeears}` which allow you to query point and gridded remote sensing data.
+
+- `{MODISTools}` does not require a login, and will be used as an easy example.
+- `{appeears}` requires a login - hard to demo within a shorter time frame
+
+## Other common data sources
+
+- ECMWFR Copernicus Data Services `{ecmwfr}`
+- NASA EarthData and digital archives `{MODISTools}` & `{appeears}`
+- National Ecosystem Observation Network (NEON) `{rnpn}`
+
+Scientific data repositories (open static data downloads or deposits)
+
+- Zenodo.org
+- Dryad
+- Figshare
+
+## Downloading MODIS data
+
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+#| code-line-numbers: "|4"
+
+library(MODISTools)
+library(dplyr)
+
+# list all products
+MODISTools::mt_products()
+```
+
+## Downloading MODIS data
+### listing products
+
+```{r}
+library(MODISTools)
+MODISTools::mt_products()
+```
+## Downloading MODIS data
+### grab the data
+
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+
+phenology <- MODISTools::mt_subset(
+  product = "MCD12Q2",
+  lat = 46.6756,
+  lon = 7.85480,
+  band = "Greenup.Num_Modes_01",
+  start = "2012-01-01",
+  end = "2012-12-31",
+  km_lr = 100,
+  km_ab = 100,
+  site_name = "swiss",
+  internal = TRUE,
+  progress = FALSE
+)
+```
+
+## Downloading MODIS data
+### reformatting
+
+Converting the dates, and the format
+
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+#| code-line-numbers: "|2-7|10-13"
+
+# screening of data
+phenology <- phenology |>
+  mutate(
+    value = ifelse(value > 32656, NA, value),
+    value = as.numeric(format(as.Date("1970-01-01") + value, "%j")),
+    value = ifelse (value < 200, value, NA)
+  )
+
+# convert to raster format
+phenology_raster <- MODISTools::mt_to_terra(
+  phenology,
+  reproject = TRUE
+)
+
+```
+
+## Downloading MODIS data
+### data vizualization
+
+Visualizing the data!
+
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+
+plot(phenology_raster)
+```
+
+## Phenology modelling
+
+Download a time series of LAI data
+
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+
+df <- MODISTools::mt_subset(
+  product = "MCD15A3H",
+  lat = 42.536669726040884,
+  lon = -72.17951595626516,
+  band = "Lai_500m",
+  start = "2002-01-01",
+  end = "2022-12-31",
+  km_lr = 0,
+  km_ab = 0,
+  site_name = "HF",
+  internal = TRUE,
+  progress = TRUE
+)
+```
+
+## Phenology modelling
+
+Convert dates
+
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+
+# convert the date to a single year
+df <- df |>
+  mutate(
+    # scale the values correctly
+    value =  value * as.numeric(scale),
+    date = as.Date(calendar_date),
+    year = as.numeric(format(date, "%Y")) 
+  )
+```
+
+## Phenology modelling
+
+Convert dates
+
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+
+# I will use the phenocamr package which 
+# interfaces with the phenocam network API
+# to download time series of vegetation 
+# greenness and derived phenology metrics
+library(phenocamr)
+
+# download greenness time series,
+# calculate phenology (phenophases),
+# amend with DAYMET data
+phenocamr::download_phenocam(
+  site = "harvard$",
+  veg_type = "DB",
+  roi_id = "1000",
+  daymet = TRUE,
+  phenophase = TRUE,
+  trim = 2022,
+  out_dir = tempdir()
+  )
+
+```
+
+## Phenology modelling
+
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+
+# data 
+harvard_phenocam_data <- readr::read_csv(
+  file.path(tempdir(), "harvard_DB_1000_3day.csv"), 
+  comment = "#"
+  )
+
+# reading in harvard phenology only retaining
+# spring (rising) phenology for the GCC 90th
+# percentile time series (the default)
+harvard_phenology <- readr::read_csv(
+  file.path(
+    tempdir(),
+    "harvard_DB_1000_3day_transition_dates.csv"
+    ),
+  comment = "#"
+) |>
+  dplyr::filter(
+    direction == "rising",
+    gcc_value == "gcc_90"
+  )
+```
+
+
+## Phenology model
+
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+
+gdd_model <- function(temp, par) {
+  # split out parameters from a simple
+  # vector of parameter values
+  temp_threshold <- par[1]
+  gdd_crit <- par[2]
+  
+  # accumulate growing degree days for
+  # temperature data
+  gdd <- cumsum(ifelse(temp > temp_threshold, temp - temp_threshold, 0))
+  
+  # figure out when the number of growing
+  # degree days exceeds the minimum value
+  # required for leaf development, only
+  # return the first value
+  doy <- unlist(which(gdd >= gdd_crit)[1])
+  
+  return(doy)
+}
+
+```
+
+## Phenology model
+
+
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+
+prediction <- harvard_temp |>
+  dplyr::filter(
+    year == 2010
+  ) |>
+  group_by(year) |>
+  summarize(
+    pred = gdd_model(
+      temp = tmean,
+      par = c(5, 130.44)
+    )  
+  )
+
+print(prediction)
+
+```
+
+## Phenology model
+
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+
+# run model and compare to true values
+# returns the RMSE
+rmse_gdd <- function(par, data) {
+  
+  # split out data
+  drivers <- data$drivers
+  validation <- data$validation
+  
+  # calculate phenology predictions
+  # and put in a data frame
+  predictions <- drivers |>
+    group_by(year) |>
+    summarise(
+      predictions = gdd_model(
+        temp = tmean,
+        par = par
+      )
+    )
+  
+  predictions <- left_join(predictions, validation, by = "year")
+  
+  rmse <- predictions |>
+    summarise(
+      rmse = sqrt(mean((predictions - doy)^2, na.rm = TRUE))
+    ) |>
+    pull(rmse)
+  
+  # return rmse value
+  return(rmse)
+}
+
+```
+
+## Phenology model
+
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+
+# data needs to be provided in a consistent
+# single data file, a nested data structure
+# will therefore accept non standard data formats
+data <- list(
+  drivers = harvard_temp,
+  validation = harvard_phenology
+  )
+
+# optimize the model parameters
+optim_par = GenSA::GenSA(
+ par = c(0, 130),
+ fn = rmse_gdd,
+ lower = c(-10,0),
+ upper = c(45,500),
+ control = list(
+   max.call = 4000
+   ),
+ data = data
+)$par
+```
+
+## Model predictions
+
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+
+# run the model for all years
+# to get the phenology predictions
+predictions <- harvard_temp |>
+  group_by(year) |>
+  summarize(
+   prediction = gdd_model(
+    temp = tmean,
+    par = optim_par
+  )  
+  )
+```
+
+## Acknowledgements & links
+
+LEMONTREE project / Uni. Bern
+
+
+
+
