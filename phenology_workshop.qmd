@@ -1,16 +1,40 @@
 ---
-title: "Handful of Pixels"
-author: "Koen Hufkens"
+title: "A Handful of Pixels"
+subtitle: "big science using small data"
+author: "Koen Hufkens, PhD"
 
 title-slide-attributes:
-    data-background-color: "blue"
+    data-background-color: "#0b2735"
 
 format: 
   revealjs:
+    slide-number: true
+    logo: logo-full.png
+    css: logo.css
     background-transition: fade
 ---
 
-## Outline {background-color="aquamarine"}
+
+## Acknowledgements
+
+LEMONTREE project / Uni. Bern
+
+Harvard, INRAE, BELSPO
+
+## Rational
+
+::: {.incremental}
+- data as large as necessary
+- ... but as small as possible
+- lean computing
+- first principles, before scaling
+:::
+
+::: {.notes}
+This workshop leans on r packages written for the community by BlueGreen Labs, as well as a course designed to understand and manipulate geospatial data, as taught at the University of Bern.
+:::
+
+## Outline
 
 ::: {.incremental}
 - Geospatial processing
@@ -28,8 +52,10 @@ This workshop leans on r packages written for the community by BlueGreen Labs, a
 
 Key libraries
 
+::: {.incremental}
 - `{terra}` (replacing `{raster}`)
 - `{sf}`
+:::
 
 ::: {.notes}
 Two main libraries underpin geospatial processing in R (for the most part). This is the terra library for raster data and the sf library for vector data.
@@ -98,11 +124,13 @@ library(terra)
 
 ## Finding geospatial data
 
+::: {.incremental}
 - How to find / access geospatial data?
   - Application Programme Interfaces (APIs)
   - bulk download
   - STAC
-- Consider the source
+- Consider the source (data provenance)
+:::
 
 ::: {.notes}
 Finding and wrangling data is often the most time intensive part of an analysis. 80% + of your time will cover all aspects of data manipulation and exploration. You can use all the help you can get, and using these tools will speed things up and free time for creative work.
@@ -110,32 +138,42 @@ Finding and wrangling data is often the most time intensive part of an analysis.
 
 ## APIs
 
-I will focus on two APIs `{MODISTools}` and `{appeears}` which allow you to query point and gridded remote sensing data.
+I will focus on two APIs `{MODISTools}`, `{ecmwfr}` and `{appeears}` which allow you to query point and gridded remote sensing or climate data.
 
+::: {.incremental}
 - `{MODISTools}` does not require a login, and will be used as an easy example.
-- `{appeears}` requires a login - hard to demo within a shorter time frame
+- `{ecmwfr}`/`{appeears}` requires a login - hard to demo within a shorter time frame
+:::
 
-## Other common data sources
+## Common data sources
 
-- ECMWFR Copernicus Data Services `{ecmwfr}`
-- NASA EarthData and digital archives `{MODISTools}` & `{appeears}`
+::: {.incremental}
+- ECMWFR Copernicus Data Services `{ecmwfr}*`
+- NASA EarthData and digital archives `{MODISTools}*` & `{appeears}*`
 - National Ecosystem Observation Network (NEON) `{rnpn}`
+- PEP725 `{phenor}*`
+- ICOS `{icoscp}*` (partial support)
+- GBIF `{rgbif}` 
+:::
+
+## Common data sources
 
 Scientific data repositories (open static data downloads or deposits)
 
+::: {.incremental}
 - Zenodo.org
 - Dryad
 - Figshare
+:::
 
 ## Downloading MODIS data
 
 ```{r}
 #| echo: TRUE
 #| eval: FALSE
-#| code-line-numbers: "|4"
+#| code-line-numbers: "|3"
 
 library(MODISTools)
-library(dplyr)
 
 # list all products
 MODISTools::mt_products()
@@ -178,7 +216,8 @@ Converting the dates, and the format
 ```{r}
 #| echo: TRUE
 #| eval: FALSE
-#| code-line-numbers: "|2-7|10-13"
+#| code-line-numbers: "|3-8|11-14"
+library(dplyr)
 
 # screening of data
 phenology <- phenology |>
@@ -239,7 +278,6 @@ Convert dates
 #| echo: TRUE
 #| eval: FALSE
 
-# convert the date to a single year
 df <- df |>
   mutate(
     # scale the values correctly
@@ -256,16 +294,9 @@ Convert dates
 ```{r}
 #| echo: TRUE
 #| eval: FALSE
-
-# I will use the phenocamr package which 
-# interfaces with the phenocam network API
-# to download time series of vegetation 
-# greenness and derived phenology metrics
+#| code-line-numbers: "|1|3-11"
 library(phenocamr)
 
-# download greenness time series,
-# calculate phenology (phenophases),
-# amend with DAYMET data
 phenocamr::download_phenocam(
   site = "harvard$",
   veg_type = "DB",
@@ -284,15 +315,13 @@ phenocamr::download_phenocam(
 #| echo: TRUE
 #| eval: FALSE
 
-# data 
+# time series
 harvard_phenocam_data <- readr::read_csv(
   file.path(tempdir(), "harvard_DB_1000_3day.csv"), 
   comment = "#"
   )
 
-# reading in harvard phenology only retaining
-# spring (rising) phenology for the GCC 90th
-# percentile time series (the default)
+# calculated phenology dates
 harvard_phenology <- readr::read_csv(
   file.path(
     tempdir(),
@@ -396,15 +425,12 @@ rmse_gdd <- function(par, data) {
 
 ```
 
-## Phenology model
+## Model optimization
 
 ```{r}
 #| echo: TRUE
 #| eval: FALSE
 
-# data needs to be provided in a consistent
-# single data file, a nested data structure
-# will therefore accept non standard data formats
 data <- list(
   drivers = harvard_temp,
   validation = harvard_phenology
@@ -440,11 +466,4 @@ predictions <- harvard_temp |>
   )  
   )
 ```
-
-## Acknowledgements & links
-
-LEMONTREE project / Uni. Bern
-
-
-
 
