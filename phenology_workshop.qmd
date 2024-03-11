@@ -80,12 +80,18 @@ This workshop leans on R packages written for the community by BlueGreen Labs, a
 ## Loading all libraries
 
 ```{r}
+#| echo: TRUE
+#| eval: FALSE
+#| code-line-numbers: "|1|2|3|4|5|6|"
 library(tidyverse)
 library(geodata)
 library(MODISTools)
 library(phenocamr)
 library(terra)
 library(GenSA)
+
+# if you need to install all of them first use
+install.packages(c("tidyverse","geodata","MODISTools","phenocamr","terra","GenSA"))
 ```
 
 ## Geospatial processing in R
@@ -116,18 +122,7 @@ Data types use discrete locations (pixels) or vectors to define regions. I will 
 :::
 
 ## Manipulating raster data
-
-First we load the required `{terra}` library
-
-```{r}
-#| echo: TRUE
-#| eval: FALSE
-
-# comment
-r <- rast("")
-```
-
-## Band math
+### Band math
 
 First we load the required `{terra}` library
 
@@ -147,7 +142,7 @@ First we load the required `{terra}` library
 ```{r}
 #| echo: TRUE
 #| eval: FALSE
-#| code-line-numbers: "|2"
+#| code-line-numbers: "|2|"
 
 # comment
 library(terra)
@@ -203,7 +198,7 @@ Scientific data repositories (open static data downloads or deposits)
 ```{r}
 #| echo: TRUE
 #| eval: FALSE
-#| code-line-numbers: "|1|3-7|9-14"
+#| code-line-numbers: "|1|3-7|9-14|"
 geodata::elevation_3s(
     lat = 46.6756,
     lon = 7.85480,
@@ -265,6 +260,12 @@ phenology <- MODISTools::mt_subset(
 ```
 
 ## Downloading MODIS data
+### grab the data
+
+If downloads are too slow data can be downloaded from:
+https://github.com/bluegreen-labs/data/raw/
+
+## Downloading MODIS data
 ### reformatting
 
 Converting the dates, and the format
@@ -272,7 +273,7 @@ Converting the dates, and the format
 ```{r}
 #| echo: TRUE
 #| eval: TRUE
-#| code-line-numbers: "|2-7|9-12"
+#| code-line-numbers: "|2-7|9-12|"
 # screening of data
 phenology <- phenology |>
   mutate(
@@ -306,7 +307,7 @@ plot(phenology_raster)
 ```{r}
 #| echo: TRUE
 #| eval: TRUE
-#| code-line-numbers: "|1-5|7-11"
+#| code-line-numbers: "|1-5|7-11|"
 
 dem <- terra::resample(
   x = dem,
@@ -326,7 +327,7 @@ dem <- terra::mask(
 ```{r}
 #| echo: TRUE
 #| eval: TRUE
-#| code-line-numbers: "|2-3|4-8"
+#| code-line-numbers: "|2-3|4-8|"
 
 # convert to data frame and merge
 dem_df <- as.vector(dem)
@@ -458,7 +459,7 @@ Convert dates
 ```{r}
 #| echo: TRUE
 #| eval: FALSE
-#| code-line-numbers: "|1|3-11"
+#| code-line-numbers: "|1|3-11|"
 library(phenocamr)
 
 phenocamr::download_phenocam(
@@ -472,6 +473,11 @@ phenocamr::download_phenocam(
   )
 
 ```
+
+
+::: {.notes}
+This routine downloads the phenocam data for the deciduous broadleaf class, calculates the phenophases, and aligns the data with matching daymet data. I'll use the daymet data in modelling. Although US centric the same routines apply for EU based modelling efforts. I fall back on DAYMET data for the ease of use.
+:::
 
 ## Phenology modelling
 
@@ -499,12 +505,16 @@ harvard_phenology <- readr::read_csv(
   )
 ```
 
+::: {.notes}
+This routine reads in the time series and calculated phenology dates, filtering out only the relevant spring characteristics.
+:::
 
 ## Phenology model
 
 ```{r}
 #| echo: TRUE
 #| eval: FALSE
+#| code-line-numbers: "|4-5|9|15|"
 
 gdd_model <- function(temp, par) {
   # split out parameters from a simple
@@ -527,8 +537,11 @@ gdd_model <- function(temp, par) {
 
 ```
 
-## Phenology model
+::: {.notes}
+Here I formulate a simple growing degree day model. With temperature as input, together with a list of parameters `par`, the threshold temperature and F* the critical growing degree days if exceeded should trigger phenology.
+:::
 
+## Phenology model
 
 ```{r}
 #| echo: TRUE
@@ -542,7 +555,7 @@ prediction <- harvard_temp |>
   summarize(
     pred = gdd_model(
       temp = tmean,
-      par = c(5, 130.44)
+      par = c(5, 130)
     )  
   )
 
@@ -550,11 +563,17 @@ print(prediction)
 
 ```
 
-## Phenology model
+
+::: {.notes}
+We can now run the model on our data using a simple call, with ad-hoc parameters, say a temperature threshold of 5 degrees C, and a GDD F* threshold of 130. However, these parameters are ad-hoc and not optimized for our current dataset. To do so we need to find the optimal parameters for this problem. This will require... parameter optimization.
+:::
+
+## Parameter optimization cost function
 
 ```{r}
 #| echo: TRUE
 #| eval: FALSE
+#| code-line-numbers: "|3|6-7|9-16|"
 
 # run model and compare to true values
 # returns the RMSE
@@ -631,3 +650,37 @@ predictions <- harvard_temp |>
   )
 ```
 
+## Model predictions - plot
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+
+
+```
+
+## Spatial scaling
+
+Download spatial driver data (DAYMET)
+
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+
+
+
+
+```
+
+## Spatial scaling
+
+Run the model on the spatial data, plot the results
+
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+
+
+
+
+```

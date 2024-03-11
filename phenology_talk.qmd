@@ -1,0 +1,183 @@
+---
+title: "Phenology modelling approaches and their limitations"
+subtitle: "input, output & practices"
+author: "Koen Hufkens, PhD"
+
+title-slide-attributes:
+    data-background-color: "#0b2735"
+
+format: 
+  revealjs:
+    slide-number: true
+    logo: images/logo_duo.png
+    css: logo.css
+    background-transition: fade
+---
+
+## Acknowledgements
+
+:::: {.columns align=center}
+
+::: {.column width="50%"}
+![](images/belspo_logo.png){height=150px}
+
+![](images/nsf_logo.png){height=150px}
+
+![](images/logo-full.png){width=75%}
+:::
+
+::: {.column width="50%"}
+![](images/harvard_logo.png){height=150px}
+
+![](images/ubern_logos.png){height=150px}
+
+![](images/ugent_logo.png){height=150px}
+:::
+
+::::
+
+## Outline
+
+Casual observations on:
+
+::: {.incremental}
+- input data
+- model output results
+- (scaling) practices
+
+:::
+
+::: {.notes}
+
+:::
+
+## Outline
+
+Most of these will scale beyond phenology modelling !
+
+## Data performance - uncertainty
+
+::: {.incremental}
+- lack of recognition of data variability
+  - within and between datasets
+- limits on micro-climate adjustments - increasing model error
+- limited ontogeny to compare various metrics and datasets
+:::
+
+## Data performance - uncertainty
+
+```{r}
+#| fig-cap: "VITO / EEA / HR-VPP / Seasonal variability in vegetation index across an agricultural landscape in Landen, Belgium"
+#| fig-align: "left"
+#| out-width: "100%"
+#| echo: FALSE
+knitr::include_graphics("images/Figure2.gif")
+```
+
+## Data performance - ontogeny
+
+```{r}
+#| fig-cap: "Kosmala et al., 2018, Remote Sensing"
+#| fig-align: "left"
+#| out-width: "100%"
+#| echo: FALSE
+knitr::include_graphics("images/kosmala.png")
+```
+
+## Data performance - uncertainty
+
+::: {.incremental}
+- talk to data providers
+  - in-situ data
+  - experimental data
+- coordinate with data providers
+- comparative studies between and within various data sets
+  - multiple lines of evidence
+:::
+
+## Data performance - uncertainty
+
+Coordination, coordination, coordination
+
+- PhenoCam US <-> ICOS
+- Efforts from the French forestry service (ONF) come to mind 
+
+Such coordination is not always possible, but when possible this could
+be a target.
+
+## Model performance - extreme values
+
+::: {.incremental}
+Most models (ML or otherwise) suffer from optimization constraints
+
+- no predictions outside their operating window (training/reference data)
+- shown to be consistent in hind-casting
+- can be "fixed" ad-hoc, but might not account for non-linearity
+:::
+
+## Model performance - hindcasting
+
+```{r}
+#| fig-cap: "PEP725 hindcasting analyss"
+#| fig-align: "left"
+#| out-width: "100%"
+#| echo: FALSE
+knitr::include_graphics("images/hindcast.png")
+```
+
+## Model performance - solutions
+
+::: {.incremental}
+Addressing uncertainty by acknowledging it
+
+- provide uncertainty metrics with model optimizations (always)
+- Bayesian approaches (informed priors)
+- cross-validation and multiple lines of evidence
+:::
+
+## Model performance - Open Science
+
+Results should be REPRODUCIBLE!!!
+
+[as most driver and target data is open]
+
+## Scaling issues
+
+::: {.incremental}
+- lack of representation of granular landscape features
+  - Chelsa data is a fix (https://chelsa-climate.org/)
+  - Generally ~1km resolution data is sparse
+  - micro-climates are not accounted for
+  - exacerbate model constraint issues
+    - in training
+    - in predictions
+:::
+
+## Scaling issues - solutions
+
+::: {.incremental}
+- quantifying uncertainties (see paper Edzer Pebesma)
+- constraining the scope of studies
+- be conscious about these limitations
+
+:::
+
+## Scaling issues - Area of Applicability
+
+```{r}
+#| fig-cap: "Meyer & Pebesma, 2021, Methods in Ecology and Evolution"
+#| fig-align: "left"
+#| out-width: "100%"
+#| echo: FALSE
+knitr::include_graphics("images/Meier.png")
+```
+
+## Operational take home message
+
+- cut across all model approaches
+  - ML
+  - Bayesian
+  - (pseudo-) mechanistic
+- slowly resolving some of these issues
+  - open science gains momentum
+  - standardization
