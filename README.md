@@ -1,5 +1,3 @@
-# FAIR phenological modelling
-
 Dynamic research notes and workshop presentations of the FAIR phenological modelling workshop (11 - 15 March 2024, Leiden, the Netherlands).
 
 - [Phenology Talk slides](https://khufkens.github.io/FAIR_phenology_modelling/phenology_talk.html)
