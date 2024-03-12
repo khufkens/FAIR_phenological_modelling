@@ -268,12 +268,3 @@ knitr::include_graphics("images/Meyer.png")
   - open science gaining momentum
   - standardization / APIs are more common
 :::
-
-## New work
-
-```{r}
-#| fig-align: "center"
-#| out-width: "100%"
-#| echo: FALSE
-knitr::include_graphics("images/paper.png")
-```

@@ -9,13 +9,10 @@ title-slide-attributes:
 format: 
   revealjs:
     slide-number: true
-    logo: images/icon-512.png
+    logo: images/logo_duo.png
     css: logo.css
     background-transition: fade
 ---
-
-
-## Acknowledgements
 
 ```{r warning = FALSE, echo = FALSE}
 library(tidyverse)
@@ -24,30 +21,36 @@ library(MODISTools)
 library(phenocamr)
 library(terra)
 library(GenSA)
+library(signal)
 
 phenology <- readRDS(here::here("data/phenology_2012.rds"))
 dem <- terra::rast(here::here("data/srtm_38_03.tif"))
+ma_nh_temp <- terra::rast(here::here("data/daymet_mean_temperature.tif"))
+
+harvard_phenology <- readr::read_csv(
+    here::here("./data/harvard_DB_1000_3day_transition_dates.csv"),
+  comment = "#"
+) |>
+  dplyr::filter(
+    direction == "rising",
+    gcc_value == "gcc_90"
+  )
+
+
+harvard_phenocam_data <- readr::read_csv(
+  here::here("data/harvard_DB_1000_3day.csv"), 
+  comment = "#"
+  )
+
+# return mean daily temperature as well
+# as formal dates (for plotting)
+harvard_temp <- harvard_phenocam_data |>
+  dplyr::mutate(
+    tmean = (tmax..deg.c. + tmin..deg.c.)/2,
+    date = as.Date(date),
+    year = as.numeric(format(date, "%Y"))
+  )
 ```
-
-:::: {.columns align=center}
-
-::: {.column width="50%"}
-![](images/belspo_logo.png){height=150px}
-
-![](images/nsf_logo.png){height=150px}
-
-![](images/logo-full.png){width=75%}
-:::
-
-::: {.column width="50%"}
-![](images/harvard_logo.png){height=150px}
-
-![](images/ubern_logos.png){height=150px}
-
-![](images/ugent_logo.png){height=150px}
-:::
-
-::::
 
 ## Rational
 
@@ -71,10 +74,11 @@ This workshop leans on r packages written for the community by BlueGreen Labs, a
 - Phenology modelling
   - first principles
   - parameter optimization
+  - scaling
 :::
 
 ::: {.notes}
-This workshop leans on R packages written for the community by BlueGreen Labs, as well as a course designed to understand and manipulate geospatial data, as taught at the University of Bern.
+Note that these are toy examples, not best practices.
 :::
 
 ## Loading all libraries
@@ -82,16 +86,25 @@ This workshop leans on R packages written for the community by BlueGreen Labs, a
 ```{r}
 #| echo: TRUE
 #| eval: FALSE
-#| code-line-numbers: "|1|2|3|4|5|6|"
+
+# if you need to install all of them first use
+install.packages(
+  c("tidyverse",
+    "geodata",
+    "MODISTools",
+    "phenocamr",
+    "terra",
+    "GenSA"
+    )
+  )
+
+# load all the libraries up front
 library(tidyverse)
 library(geodata)
 library(MODISTools)
 library(phenocamr)
 library(terra)
 library(GenSA)
-
-# if you need to install all of them first use
-install.packages(c("tidyverse","geodata","MODISTools","phenocamr","terra","GenSA"))
 ```
 
 ## Geospatial processing in R
@@ -121,33 +134,6 @@ knitr::include_graphics("images/Raster_vector_tikz.svg")
 Data types use discrete locations (pixels) or vectors to define regions. I will focus on raster data for the most part, as this is more common when scaling results.
 :::
 
-## Manipulating raster data
-### Band math
-
-First we load the required `{terra}` library
-
-```{r}
-#| echo: TRUE
-#| eval: FALSE
-#| code-line-numbers: "|2"
-
-# comment
-library(terra)
-```
-
-## Masking values
-
-First we load the required `{terra}` library
-
-```{r}
-#| echo: TRUE
-#| eval: FALSE
-#| code-line-numbers: "|2|"
-
-# comment
-library(terra)
-```
-
 ## Finding geospatial data
 
 ::: {.incremental}
@@ -164,7 +150,7 @@ Finding and wrangling data is often the most time intensive part of an analysis.
 
 ## APIs
 
-I will focus on two APIs `{MODISTools}`, `{ecmwfr}` and `{appeears}` which allow you to query point and gridded remote sensing or climate data.
+I will focus on one APIs `{MODISTools}`. But, `{ecmwfr}` and `{appeears}` allow you to query point and gridded remote sensing or climate data as well.
 
 ::: {.incremental}
 - `{MODISTools}` does not require a login, and will be used as an easy example.
@@ -234,15 +220,16 @@ MODISTools::mt_products()
 ### listing products
 
 ```{r eval=FALSE}
-library(MODISTools)
 MODISTools::mt_products()
 ```
+
 ## Downloading MODIS data
 ### grab the data
 
 ```{r}
 #| echo: TRUE
 #| eval: FALSE
+#| code-line-numbers: "|2|3-4|5|6-7|8-9|10|11|"
 
 phenology <- MODISTools::mt_subset(
   product = "MCD12Q2",
@@ -255,7 +242,7 @@ phenology <- MODISTools::mt_subset(
   km_ab = 100,
   site_name = "swiss",
   internal = TRUE,
-  progress = FALSE
+  progress = TRUE
 )
 ```
 
@@ -263,7 +250,7 @@ phenology <- MODISTools::mt_subset(
 ### grab the data
 
 If downloads are too slow data can be downloaded from:
-https://github.com/bluegreen-labs/data/raw/
+https://github.com/bluegreen-labs/handful_of_pixels/raw/main/data/phenology_2012.rds
 
 ## Downloading MODIS data
 ### reformatting
@@ -273,13 +260,12 @@ Converting the dates, and the format
 ```{r}
 #| echo: TRUE
 #| eval: TRUE
-#| code-line-numbers: "|2-7|9-12|"
-# screening of data
+#| code-line-numbers: "|1-6|8-11|"
 phenology <- phenology |>
   mutate(
     value = ifelse(value > 32656, NA, value),
     value = as.numeric(format(as.Date("1970-01-01") + value, "%j")),
-    value = ifelse (value < 200, value, NA)
+    value = ifelse(value < 200, value, NA)
   )
 
 # convert to raster format
@@ -327,19 +313,14 @@ dem <- terra::mask(
 ```{r}
 #| echo: TRUE
 #| eval: TRUE
-#| code-line-numbers: "|2-3|4-8|"
-
-# convert to data frame and merge
-dem_df <- as.vector(dem)
-phenology_df <- as.vector(phenology_raster)
+#| code-line-numbers: "|2-3|" 
 sct_df <- data.frame(
-  altitude = dem_df,
-  doy = phenology_df
+  altitude = as.vector(dem),
+  doy = as.vector(phenology_raster)
   )
-
 ```
 
-## Fancy plot
+## Plot the data
 
 :::: {.columns align=center}
 
@@ -352,6 +333,7 @@ sct_df <- data.frame(
 #| fig-height: 3
 #| echo: TRUE
 #| eval: FALSE
+#| code-line-numbers: "|2|3|"
 
 ggplot(
   data = sct_df,
@@ -412,28 +394,7 @@ fit <- lm(doy ~ altitude, data = sct_df)
 print(summary(fit))
 ```
 
-## Phenology modelling
-
-Download a time series of LAI data
-
-```{r}
-#| echo: TRUE
-#| eval: FALSE
-
-df <- MODISTools::mt_subset(
-  product = "MCD15A3H",
-  lat = 42.536669726040884,
-  lon = -72.17951595626516,
-  band = "Lai_500m",
-  start = "2002-01-01",
-  end = "2022-12-31",
-  km_lr = 0,
-  km_ab = 0,
-  site_name = "HF",
-  internal = TRUE,
-  progress = TRUE
-)
-```
+Hopkins Law (four days / 400ft (120 m))
 
 ## Phenology modelling
 
@@ -442,26 +403,7 @@ Convert dates
 ```{r}
 #| echo: TRUE
 #| eval: FALSE
-
-df <- df |>
-  mutate(
-    # scale the values correctly
-    value =  value * as.numeric(scale),
-    date = as.Date(calendar_date),
-    year = as.numeric(format(date, "%Y")) 
-  )
-```
-
-## Phenology modelling
-
-Convert dates
-
-```{r}
-#| echo: TRUE
-#| eval: FALSE
-#| code-line-numbers: "|1|3-11|"
-library(phenocamr)
-
+#| code-line-numbers: "|2|3|4|5|6|7|8|"
 phenocamr::download_phenocam(
   site = "harvard$",
   veg_type = "DB",
@@ -474,7 +416,6 @@ phenocamr::download_phenocam(
 
 ```
 
-
 ::: {.notes}
 This routine downloads the phenocam data for the deciduous broadleaf class, calculates the phenophases, and aligns the data with matching daymet data. I'll use the daymet data in modelling. Although US centric the same routines apply for EU based modelling efforts. I fall back on DAYMET data for the ease of use.
 :::
@@ -485,11 +426,26 @@ This routine downloads the phenocam data for the deciduous broadleaf class, calc
 #| echo: TRUE
 #| eval: FALSE
 
-# time series
 harvard_phenocam_data <- readr::read_csv(
   file.path(tempdir(), "harvard_DB_1000_3day.csv"), 
   comment = "#"
   )
+
+# return mean daily temperature as well
+# as formal dates (for plotting)
+harvard_temp <- harvard_phenocam_data |>
+  dplyr::mutate(
+    tmean = (tmax..deg.c. + tmin..deg.c.)/2,
+    date = as.Date(date),
+    year = as.numeric(format(date, "%Y"))
+  )
+```
+
+## Phenology modelling
+
+```{r}
+#| echo: TRUE
+#| eval: FALSE
 
 # calculated phenology dates
 harvard_phenology <- readr::read_csv(
@@ -498,7 +454,7 @@ harvard_phenology <- readr::read_csv(
     "harvard_DB_1000_3day_transition_dates.csv"
     ),
   comment = "#"
-) |>
+  ) |>
   dplyr::filter(
     direction == "rising",
     gcc_value == "gcc_90"
@@ -509,12 +465,33 @@ harvard_phenology <- readr::read_csv(
 This routine reads in the time series and calculated phenology dates, filtering out only the relevant spring characteristics.
 :::
 
+## Phenology modelling
+
+Select threshold days
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+
+harvard_phenology <- harvard_phenology |>
+  mutate(
+    doy = as.numeric(format(as.Date(transition_25),"%j")),
+    year = as.numeric(format(as.Date(transition_25),"%Y"))
+  ) |>
+  select(
+    year,
+    doy,
+    transition_25,
+    threshold_25
+    )
+```
+
 ## Phenology model
 
 ```{r}
 #| echo: TRUE
-#| eval: FALSE
-#| code-line-numbers: "|4-5|9|15|"
+#| eval: TRUE
+#| code-line-numbers: "|1|17|4-5|9|15|"
 
 gdd_model <- function(temp, par) {
   # split out parameters from a simple
@@ -543,36 +520,53 @@ Here I formulate a simple growing degree day model. With temperature as input, t
 
 ## Phenology model
 
+Fixed parameters
+
 ```{r}
 #| echo: TRUE
 #| eval: FALSE
+#| code-line-numbers: "|2|3-8|"
 
 prediction <- harvard_temp |>
-  dplyr::filter(
-    year == 2010
-  ) |>
   group_by(year) |>
   summarize(
     pred = gdd_model(
       temp = tmean,
       par = c(5, 130)
-    )  
+    )
   )
-
-print(prediction)
-
 ```
-
 
 ::: {.notes}
 We can now run the model on our data using a simple call, with ad-hoc parameters, say a temperature threshold of 5 degrees C, and a GDD F* threshold of 130. However, these parameters are ad-hoc and not optimized for our current dataset. To do so we need to find the optimal parameters for this problem. This will require... parameter optimization.
 :::
 
-## Parameter optimization cost function
+## Phenology model
+
+```{r}
+#| echo: FALSE
+#| eval: TRUE
+prediction <- harvard_temp |>
+  group_by(year) |>
+  summarize(
+    pred = gdd_model(
+      temp = tmean,
+      par = c(5, 130)
+    )
+  )
+```
 
 ```{r}
 #| echo: TRUE
-#| eval: FALSE
+#| eval: TRUE
+print(prediction)
+```
+
+## Cost function
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
 #| code-line-numbers: "|3|6-7|9-16|"
 
 # run model and compare to true values
@@ -608,11 +602,21 @@ rmse_gdd <- function(par, data) {
 
 ```
 
+## Simulated annealing
+
+```{r}
+#| fig-align: "center"
+#| out-width: "100%"
+#| echo: FALSE
+knitr::include_graphics("images/SANN.gif")
+```
+
 ## Model optimization
 
 ```{r}
 #| echo: TRUE
 #| eval: FALSE
+#| code-line-numbers: "|1-4|7-15|"
 
 data <- list(
   drivers = harvard_temp,
@@ -621,22 +625,51 @@ data <- list(
 
 # optimize the model parameters
 optim_par = GenSA::GenSA(
- par = c(0, 130),
+ data = data,
  fn = rmse_gdd,
  lower = c(-10,0),
  upper = c(45,500),
  control = list(
    max.call = 4000
-   ),
- data = data
-)$par
+   )
+)
+```
+
+
+```{r warning=FALSE, message=FALSE, include=FALSE}
+#| echo: FALSE
+#| eval: TRUE
+
+data <- list(
+  drivers = harvard_temp,
+  validation = harvard_phenology
+  )
+
+# optimize the model parameters
+optim_par = GenSA::GenSA(
+ data = data,
+ fn = rmse_gdd,
+ lower = c(-10,0),
+ upper = c(45,500),
+ control = list(
+   max.call = 400
+   )
+)
+```
+
+Print the optimal parameters
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+print(optim_par$par)
 ```
 
 ## Model predictions
 
 ```{r}
 #| echo: TRUE
-#| eval: FALSE
+#| eval: TRUE
 
 # run the model for all years
 # to get the phenology predictions
@@ -645,7 +678,7 @@ predictions <- harvard_temp |>
   summarize(
    prediction = gdd_model(
     temp = tmean,
-    par = optim_par
+    par = optim_par$par
   )  
   )
 ```
@@ -656,21 +689,139 @@ predictions <- harvard_temp |>
 #| echo: TRUE
 #| eval: TRUE
 
-
+print(head(predictions))
 ```
+
+## Model predictions - plot
+
+:::: {.columns align=center}
+
+::: {.column width="50%"}
+
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+validation <- left_join(
+  predictions, 
+  harvard_phenology
+)
+
+ggplot(validation) +
+  geom_smooth(
+    aes(doy, prediction),
+    method = "lm"
+  ) +
+  geom_point(
+    aes(doy, prediction)
+  ) +
+  geom_abline(
+    intercept=0, slope=1
+    ) +
+  labs(
+    x = "Observed (DOY)",
+    y = "Predicted (DOY)"
+  )
+```
+
+:::
+
+::: {.column width="50%"}
+
+```{r}
+#| echo: FALSE
+#| eval: TRUE
+
+# join predicted with observed data
+validation <- left_join(
+  predictions,
+  harvard_phenology
+  )
+
+ggplot(validation) +
+  geom_smooth(
+    aes(
+      doy,
+      prediction
+    ),
+    method = "lm"
+  ) +
+  geom_point(
+    aes(doy,prediction
+    )
+  ) +
+  geom_abline(
+    intercept=0, slope=1
+    ) +
+  labs(
+    x = "Observed (DOY)",
+    y = "Predicted (DOY)"
+  )
+```
+
+:::
+
+::::
 
 ## Spatial scaling
 
 Download spatial driver data (DAYMET)
 
+:::: {.columns align=center}
+
+::: {.column width="50%"}
+
 ```{r}
 #| echo: TRUE
 #| eval: FALSE
 
+# Download daily data
+daymetr::download_daymet_tiles(
+  tiles = 11935,
+  start = 2012,
+  end = 2012,
+  param = c("tmin","tmax"),
+  path = tempdir(),
+  silent = FALSE
+  )
 
-
+# calculate the daily mean values
+r <- daymetr::daymet_grid_tmean(
+  path = tempdir(),
+  product = 11935,
+  year = 2012,
+  internal = TRUE
+)
 
 ```
+:::
+
+::: {.column width="50%"}
+
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+# reproject to lat lon
+r <- terra::project(
+  r,
+  "+init=epsg:4326"
+)
+
+# subset to first 180 days (layers)
+ma_nh_temp <- terra::subset(
+  r,
+  1:180
+)
+```
+:::
+::::
+
+## Spatial scaling
+
+Download data:
+
+https://github.com/bluegreen-labs/handful_of_pixels/raw/main/data/daymet_mean_temperature.tif
+
+`{terra}` allows loading remote data!!
 
 ## Spatial scaling
 
@@ -678,9 +829,28 @@ Run the model on the spatial data, plot the results
 
 ```{r}
 #| echo: TRUE
-#| eval: FALSE
+#| eval: TRUE
 
-
-
+predicted_phenology <- terra::app(
+  ma_nh_temp,
+  fun = gdd_model,
+  par = optim_par$par
+)
 
 ```
+
+## Spatial scaling
+
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+
+plot(predicted_phenology)
+```
+
+
+## Full course
+
+https://bluegreen-labs.github.io/handful_of_pixels/
+
