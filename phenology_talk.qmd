@@ -145,7 +145,7 @@ Most models (ML or otherwise) suffer from optimization constraints
 ## Model performance - hindcasting
 
 ```{r}
-#| fig-cap: "PEP725 hindcasting analyss"
+#| fig-cap: "PEP725 hindcasting analysis"
 #| fig-align: "center"
 #| out-width: "100%"
 #| echo: FALSE
