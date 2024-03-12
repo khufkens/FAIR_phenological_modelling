@@ -240,11 +240,20 @@ Results should be REPRODUCIBLE!!!
 ## Scaling issues - Area of Applicability
 
 ```{r}
+#| fig-align: "center"
+#| out-width: "100%"
+#| echo: FALSE
+knitr::include_graphics("images/Meyer_title.png")
+```
+
+## Scaling issues - Area of Applicability
+
+```{r}
 #| fig-cap: "Meyer & Pebesma, 2021, Methods in Ecology and Evolution"
 #| fig-align: "center"
 #| out-width: "100%"
 #| echo: FALSE
-knitr::include_graphics("images/Meier.png")
+knitr::include_graphics("images/Meyer.png")
 ```
 
 ## Take home message
@@ -259,3 +268,12 @@ knitr::include_graphics("images/Meier.png")
   - open science gaining momentum
   - standardization / APIs are more common
 :::
+
+## New work
+
+```{r}
+#| fig-align: "center"
+#| out-width: "100%"
+#| echo: FALSE
+knitr::include_graphics("images/paper.png")
+```
