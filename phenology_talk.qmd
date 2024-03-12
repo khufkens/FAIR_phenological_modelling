@@ -137,7 +137,7 @@ be a target.
 ::: {.incremental}
 Most models (ML or otherwise) suffer from optimization constraints
 
-- no predictions outside their operating window (training/reference data)
+- limited predictions outside their operating window (training/reference data)
 - consistency in hind-casting?
 - could be "fixed" ad-hoc, but might not account for non-linearity
 :::
