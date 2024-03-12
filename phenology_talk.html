@@ -358,12 +358,12 @@ Koen Hufkens, PhD
 <div>
 <ul>
 <li class="fragment">input data</li>
-<li class="fragment">model output results</li>
-<li class="fragment">(scaling) practices</li>
+<li class="fragment">model (output) results</li>
+<li class="fragment">general (scaling) practices</li>
 </ul>
 </div>
 <aside class="notes">
-
+<p>All of these matters, luckily, have been touched upon by previous speakers!!</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -382,6 +382,10 @@ Koen Hufkens, PhD
 </section>
 <section id="data-performance---uncertainty" class="slide level2">
 <h2>Data performance - uncertainty</h2>
+
+<img data-src="images/dumpster.gif" style="width:100.0%" class="r-stretch quarto-figure-center"><p class="caption">Dumpster fire</p></section>
+<section id="data-performance---uncertainty-1" class="slide level2">
+<h2>Data performance - uncertainty</h2>
 <div>
 <ul>
 <li class="fragment">lack of recognition of data variability
@@ -392,17 +396,56 @@ Koen Hufkens, PhD
 <li class="fragment">limited ontogeny to compare various metrics and datasets</li>
 </ul>
 </div>
+<aside class="notes">
+<p>Shout out to Barbara Templ, Annette Menzel</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section>
-<section id="data-performance---uncertainty-1" class="slide level2">
+<section id="data-performance---uncertainty-2" class="slide level2">
 <h2>Data performance - uncertainty</h2>
 
-<img data-src="images/Figure2.gif" style="width:100.0%" class="r-stretch quarto-figure-left"><p class="caption">VITO / EEA / HR-VPP / Seasonal variability in vegetation index across an agricultural landscape in Landen, Belgium</p></section>
+<img data-src="images/Figure2.gif" style="width:100.0%" class="r-stretch quarto-figure-center"><p class="caption">VITO / EEA / HR-VPP / Seasonal variability in vegetation index across an agricultural landscape in Landen, Belgium</p><aside class="notes">
+<p>Shout out to Barbara Templ and Helfried, on how uncertain data</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
 <section id="data-performance---ontogeny" class="slide level2">
 <h2>Data performance - ontogeny</h2>
 
-<img data-src="images/kosmala.png" style="width:100.0%" class="r-stretch quarto-figure-left"><p class="caption">Kosmala et al., 2018, Remote Sensing</p></section>
-<section id="data-performance---uncertainty-2" class="slide level2">
-<h2>Data performance - uncertainty</h2>
+<img data-src="images/kosmala.png" style="width:100.0%" class="r-stretch quarto-figure-center"><p class="caption">Kosmala et al., 2018, Remote Sensing</p><aside class="notes">
+<p>Coordination is important, cross cutting datasets as discussed by Inaki.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="data-performance---solutions" class="slide level2">
+<h2>Data performance - solutions</h2>
 <div>
 <ul>
 <li class="fragment">talk to data providers
@@ -417,13 +460,26 @@ Koen Hufkens, PhD
 </ul></li>
 </ul>
 </div>
+<aside class="notes">
+<p>Get everyone in the same room!!</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section>
 <section id="data-performance---uncertainty-3" class="slide level2">
 <h2>Data performance - uncertainty</h2>
 <p>Coordination, coordination, coordination</p>
 <ul>
 <li>PhenoCam US &lt;-&gt; ICOS</li>
-<li>Efforts from the French forestry service (ONF) come to mind</li>
+<li>TEMPO (intercomparison)</li>
 </ul>
 <p>Such coordination is not always possible, but when possible this could be a target.</p>
 </section>
@@ -433,30 +489,63 @@ Koen Hufkens, PhD
 <p>Most models (ML or otherwise) suffer from optimization constraints</p>
 <ul>
 <li class="fragment">no predictions outside their operating window (training/reference data)</li>
-<li class="fragment">shown to be consistent in hind-casting</li>
-<li class="fragment">can be “fixed” ad-hoc, but might not account for non-linearity</li>
+<li class="fragment">consistency in hind-casting?</li>
+<li class="fragment">could be “fixed” ad-hoc, but might not account for non-linearity</li>
 </ul>
 </div>
 </section>
 <section id="model-performance---hindcasting" class="slide level2">
 <h2>Model performance - hindcasting</h2>
 
-<img data-src="images/hindcast.png" style="width:100.0%" class="r-stretch quarto-figure-left"><p class="caption">PEP725 hindcasting analyss</p></section>
+<img data-src="images/hindcast.png" style="width:100.0%" class="r-stretch quarto-figure-center"><p class="caption">PEP725 hindcasting analyss</p></section>
 <section id="model-performance---solutions" class="slide level2">
 <h2>Model performance - solutions</h2>
 <div>
 <p>Addressing uncertainty by acknowledging it</p>
 <ul>
-<li class="fragment">provide uncertainty metrics with model optimizations (always)</li>
+<li class="fragment">provide uncertainty metrics with model optimizations</li>
 <li class="fragment">Bayesian approaches (informed priors)</li>
 <li class="fragment">cross-validation and multiple lines of evidence</li>
 </ul>
 </div>
 </section>
-<section id="model-performance---open-science" class="slide level2">
-<h2>Model performance - Open Science</h2>
+<section id="model-structure" class="slide level2">
+<h2>Model structure</h2>
+<div>
+<ul>
+<li class="fragment">interrogate (new) model structures
+<ul>
+<li class="fragment">equifinality</li>
+<li class="fragment">parameter correlations / co-linearity of variables</li>
+<li class="fragment">inverse modelling</li>
+</ul></li>
+<li class="fragment">borrow from other fields?</li>
+<li class="fragment">consider a molecular basis</li>
+</ul>
+</div>
+<aside class="notes">
+<p>Shout out to Benedict!</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="models-need-open-science" class="slide level2">
+<h2>Models need Open Science</h2>
 <p>Results should be REPRODUCIBLE!!!</p>
-<p>[as most driver and target data is open]</p>
+<div>
+<ul>
+<li class="fragment">concerns data</li>
+<li class="fragment">concerns code perspective (github and version control)</li>
+</ul>
+</div>
 </section>
 <section id="scaling-issues" class="slide level2">
 <h2>Scaling issues</h2>
@@ -464,8 +553,6 @@ Koen Hufkens, PhD
 <ul>
 <li class="fragment">lack of representation of granular landscape features
 <ul>
-<li class="fragment">Chelsa data is a fix (https://chelsa-climate.org/)</li>
-<li class="fragment">Generally ~1km resolution data is sparse</li>
 <li class="fragment">micro-climates are not accounted for</li>
 <li class="fragment">exacerbate model constraint issues
 <ul>
@@ -480,31 +567,37 @@ Koen Hufkens, PhD
 <h2>Scaling issues - solutions</h2>
 <div>
 <ul>
-<li class="fragment">quantifying uncertainties (see paper Edzer Pebesma)</li>
-<li class="fragment">constraining the scope of studies</li>
+<li class="fragment">quantifying uncertainties and Area of Applicability
+<ul>
+<li class="fragment">properly constrain the scope of studies</li>
 <li class="fragment">be conscious about these limitations</li>
+</ul></li>
 </ul>
 </div>
 </section>
 <section id="scaling-issues---area-of-applicability" class="slide level2">
 <h2>Scaling issues - Area of Applicability</h2>
 
-<img data-src="images/Meier.png" style="width:100.0%" class="r-stretch quarto-figure-left"><p class="caption">Meyer &amp; Pebesma, 2021, Methods in Ecology and Evolution</p></section>
+<img data-src="images/Meier.png" style="width:100.0%" class="r-stretch quarto-figure-center"><p class="caption">Meyer &amp; Pebesma, 2021, Methods in Ecology and Evolution</p></section>
 <section id="operational-take-home-message" class="slide level2">
 <h2>Operational take home message</h2>
+<p>Very brief overview</p>
+<div>
 <ul>
-<li>cut across all model approaches
+<li class="fragment">cut across all model approaches
 <ul>
-<li>ML</li>
-<li>Bayesian</li>
-<li>(pseudo-) mechanistic</li>
+<li class="fragment">ML</li>
+<li class="fragment">Bayesian</li>
+<li class="fragment">(pseudo-) mechanistic</li>
 </ul></li>
-<li>slowly resolving some of these issues
+<li class="fragment">slowly resolving some of these issues
 <ul>
-<li>open science gains momentum</li>
-<li>standardization</li>
+<li class="fragment">coordination / comparisons / ontologies</li>
+<li class="fragment">open science gaining momentum</li>
+<li class="fragment">standardization / APIs are more common</li>
 </ul></li>
 </ul>
+</div>
 
 <img src="images/logo_duo.png" class="slide-logo r-stretch"><div class="footer footer-default">
 

@@ -42,18 +42,28 @@ Casual observations on:
 
 ::: {.incremental}
 - input data
-- model output results
-- (scaling) practices
-
+- model (output) results
+- general (scaling) practices
 :::
 
 ::: {.notes}
-
+All of these matters, luckily, have been touched upon by previous speakers!!
 :::
 
 ## Outline
 
 Most of these will scale beyond phenology modelling !
+
+## Data performance - uncertainty
+
+
+```{r}
+#| fig-cap: "Dumpster fire"
+#| fig-align: "center"
+#| out-width: "100%"
+#| echo: FALSE
+knitr::include_graphics("images/dumpster.gif")
+```
 
 ## Data performance - uncertainty
 
@@ -64,27 +74,40 @@ Most of these will scale beyond phenology modelling !
 - limited ontogeny to compare various metrics and datasets
 :::
 
+::: {.notes}
+Shout out to Barbara Templ, Annette Menzel
+:::
+
 ## Data performance - uncertainty
 
 ```{r}
 #| fig-cap: "VITO / EEA / HR-VPP / Seasonal variability in vegetation index across an agricultural landscape in Landen, Belgium"
-#| fig-align: "left"
+#| fig-align: "center"
 #| out-width: "100%"
 #| echo: FALSE
 knitr::include_graphics("images/Figure2.gif")
 ```
 
+::: {.notes}
+Shout out to Barbara Templ and Helfried, on how uncertain data
+:::
+
 ## Data performance - ontogeny
 
 ```{r}
 #| fig-cap: "Kosmala et al., 2018, Remote Sensing"
-#| fig-align: "left"
+#| fig-align: "center"
 #| out-width: "100%"
 #| echo: FALSE
 knitr::include_graphics("images/kosmala.png")
 ```
 
-## Data performance - uncertainty
+
+::: {.notes}
+Coordination is important, cross cutting datasets as discussed by Inaki.
+:::
+
+## Data performance - solutions
 
 ::: {.incremental}
 - talk to data providers
@@ -95,12 +118,16 @@ knitr::include_graphics("images/kosmala.png")
   - multiple lines of evidence
 :::
 
+::: {.notes}
+Get everyone in the same room!!
+:::
+
 ## Data performance - uncertainty
 
 Coordination, coordination, coordination
 
 - PhenoCam US <-> ICOS
-- Efforts from the French forestry service (ONF) come to mind 
+- TEMPO (intercomparisons)
 
 Such coordination is not always possible, but when possible this could
 be a target.
@@ -111,15 +138,15 @@ be a target.
 Most models (ML or otherwise) suffer from optimization constraints
 
 - no predictions outside their operating window (training/reference data)
-- shown to be consistent in hind-casting
-- can be "fixed" ad-hoc, but might not account for non-linearity
+- consistency in hind-casting?
+- could be "fixed" ad-hoc, but might not account for non-linearity
 :::
 
 ## Model performance - hindcasting
 
 ```{r}
 #| fig-cap: "PEP725 hindcasting analyss"
-#| fig-align: "left"
+#| fig-align: "center"
 #| out-width: "100%"
 #| echo: FALSE
 knitr::include_graphics("images/hindcast.png")
@@ -130,23 +157,39 @@ knitr::include_graphics("images/hindcast.png")
 ::: {.incremental}
 Addressing uncertainty by acknowledging it
 
-- provide uncertainty metrics with model optimizations (always)
+- provide uncertainty metrics with model optimizations
 - Bayesian approaches (informed priors)
 - cross-validation and multiple lines of evidence
 :::
 
-## Model performance - Open Science
+## Model structure
+
+::: {.incremental}
+- interrogate (new) model structures
+  - equifinality
+  - parameter correlations / co-linearity of variables
+  - inverse modelling
+- borrow from other fields?
+- consider a molecular basis
+:::
+
+::: {.notes}
+Shout out to Benedict!
+:::
+
+## Models need Open Science
 
 Results should be REPRODUCIBLE!!!
 
-[as most driver and target data is open]
+::: {.incremental}
+- concerns data 
+- concerns code perspective (github and version control)
+:::
 
 ## Scaling issues
 
 ::: {.incremental}
 - lack of representation of granular landscape features
-  - Chelsa data is a fix (https://chelsa-climate.org/)
-  - Generally ~1km resolution data is sparse
   - micro-climates are not accounted for
   - exacerbate model constraint issues
     - in training
@@ -156,28 +199,30 @@ Results should be REPRODUCIBLE!!!
 ## Scaling issues - solutions
 
 ::: {.incremental}
-- quantifying uncertainties (see paper Edzer Pebesma)
-- constraining the scope of studies
-- be conscious about these limitations
-
+- quantifying uncertainties and Area of Applicability
+  - properly constrain the scope of studies
+  - be conscious about these limitations
 :::
 
 ## Scaling issues - Area of Applicability
 
 ```{r}
 #| fig-cap: "Meyer & Pebesma, 2021, Methods in Ecology and Evolution"
-#| fig-align: "left"
+#| fig-align: "center"
 #| out-width: "100%"
 #| echo: FALSE
 knitr::include_graphics("images/Meier.png")
 ```
 
-## Operational take home message
+## Take home message
 
+::: {.incremental}
 - cut across all model approaches
   - ML
   - Bayesian
   - (pseudo-) mechanistic
 - slowly resolving some of these issues
-  - open science gains momentum
-  - standardization
+  - coordination / comparisons / ontologies
+  - open science gaining momentum
+  - standardization / APIs are more common
+:::
