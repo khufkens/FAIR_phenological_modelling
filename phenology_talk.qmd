@@ -162,6 +162,39 @@ Addressing uncertainty by acknowledging it
 - cross-validation and multiple lines of evidence
 :::
 
+## Model performance - solutions
+
+:::: {.columns align=center}
+
+:::{.column width="50%"}
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+
+optim_par <- phenor::pr_fit(
+  data = phenocam_DB,
+  model = "TT",
+  method = "BayesianTools",
+  control = list(
+    sampler = "DEzs",
+    settings = list(
+      burnin = 10,
+      iterations = 10000)
+    )
+)
+```
+:::
+
+:::{.column width="50%"}
+```{r}
+#| fig-align: "center"
+#| out-width: "100%"
+#| echo: FALSE
+knitr::include_graphics("images/parameters.png")
+```
+:::
+::::
+
 ## Model structure
 
 ::: {.incremental}
