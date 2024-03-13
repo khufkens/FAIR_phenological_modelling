@@ -403,6 +403,69 @@ Koen Hufkens, PhD
 </div>
 
 </section>
+<section id="phenor" class="slide level2">
+<h2>{phenor}</h2>
+
+<img data-src="images/phenor.png" style="width:100.0%" class="r-stretch quarto-figure-center"><p class="caption">https://bluegreen-labs.github.io/phenor/</p></section>
+<section id="section" class="slide level2">
+<h2></h2>
+<div class="columns" data-align="center">
+<div class="column" style="width:50%;">
+<p>Drivers</p>
+<ul>
+<li>ERA5 / CMIP</li>
+<li>Berkley Earth</li>
+<li>DAYMET</li>
+<li>NASA NEX (CMIP downscaled)*</li>
+<li>E-OBS</li>
+</ul>
+</div><div class="column" style="width:50%;">
+<p>Targets</p>
+<ul>
+<li>US-NPN</li>
+<li>PhenoCam</li>
+<li>MODIS MCD12Q2</li>
+<li>PEP725</li>
+<li>custom formatting functions</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="section-1" class="slide level2 smaller">
+<h2></h2>
+<div class="columns" data-align="center">
+<div class="column" style="width:50%;">
+<p>Optimization supported by <code>{BayesianTools}</code>, optimizer zoo (with support for priors through the control function) and cross validation through <code>pr_cross_validate()</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>optim_par <span class="ot">&lt;-</span> phenor<span class="sc">::</span><span class="fu">pr_fit</span>(</span>
+<span id="cb1-2"><a href="#cb1-2"></a>  <span class="at">data =</span> phenocam_DB,</span>
+<span id="cb1-3"><a href="#cb1-3"></a>  <span class="at">model =</span> <span class="st">"TT"</span>,</span>
+<span id="cb1-4"><a href="#cb1-4"></a>  <span class="at">method =</span> <span class="st">"BayesianTools"</span>,</span>
+<span id="cb1-5"><a href="#cb1-5"></a>  <span class="at">control =</span> <span class="fu">list</span>(</span>
+<span id="cb1-6"><a href="#cb1-6"></a>    <span class="at">sampler =</span> <span class="st">"DEzs"</span>,</span>
+<span id="cb1-7"><a href="#cb1-7"></a>    <span class="at">settings =</span> <span class="fu">list</span>(</span>
+<span id="cb1-8"><a href="#cb1-8"></a>      <span class="at">burnin =</span> <span class="dv">10</span>,</span>
+<span id="cb1-9"><a href="#cb1-9"></a>      <span class="at">iterations =</span> <span class="dv">10000</span>)</span>
+<span id="cb1-10"><a href="#cb1-10"></a>    )</span>
+<span id="cb1-11"><a href="#cb1-11"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/parameters.png" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="section-2" class="slide level2">
+<h2></h2>
+
+<img data-src="images/sad.jpg" style="width:100.0%" class="r-stretch quarto-figure-center"></section>
 <section id="rational" class="slide level2">
 <h2>Rational</h2>
 <div>
@@ -461,24 +524,24 @@ Koen Hufkens, PhD
 <section id="loading-all-libraries" class="slide level2">
 <h2>Loading all libraries</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># if you need to install all of them first use</span></span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="fu">install.packages</span>(</span>
-<span id="cb1-3"><a href="#cb1-3"></a>  <span class="fu">c</span>(<span class="st">"tidyverse"</span>,</span>
-<span id="cb1-4"><a href="#cb1-4"></a>    <span class="st">"geodata"</span>,</span>
-<span id="cb1-5"><a href="#cb1-5"></a>    <span class="st">"MODISTools"</span>,</span>
-<span id="cb1-6"><a href="#cb1-6"></a>    <span class="st">"phenocamr"</span>,</span>
-<span id="cb1-7"><a href="#cb1-7"></a>    <span class="st">"terra"</span>,</span>
-<span id="cb1-8"><a href="#cb1-8"></a>    <span class="st">"GenSA"</span></span>
-<span id="cb1-9"><a href="#cb1-9"></a>    )</span>
-<span id="cb1-10"><a href="#cb1-10"></a>  )</span>
-<span id="cb1-11"><a href="#cb1-11"></a></span>
-<span id="cb1-12"><a href="#cb1-12"></a><span class="co"># load all the libraries up front</span></span>
-<span id="cb1-13"><a href="#cb1-13"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb1-14"><a href="#cb1-14"></a><span class="fu">library</span>(geodata)</span>
-<span id="cb1-15"><a href="#cb1-15"></a><span class="fu">library</span>(MODISTools)</span>
-<span id="cb1-16"><a href="#cb1-16"></a><span class="fu">library</span>(phenocamr)</span>
-<span id="cb1-17"><a href="#cb1-17"></a><span class="fu">library</span>(terra)</span>
-<span id="cb1-18"><a href="#cb1-18"></a><span class="fu">library</span>(GenSA)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="co"># if you need to install all of them first use</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="fu">install.packages</span>(</span>
+<span id="cb2-3"><a href="#cb2-3"></a>  <span class="fu">c</span>(<span class="st">"tidyverse"</span>,</span>
+<span id="cb2-4"><a href="#cb2-4"></a>    <span class="st">"geodata"</span>,</span>
+<span id="cb2-5"><a href="#cb2-5"></a>    <span class="st">"MODISTools"</span>,</span>
+<span id="cb2-6"><a href="#cb2-6"></a>    <span class="st">"phenocamr"</span>,</span>
+<span id="cb2-7"><a href="#cb2-7"></a>    <span class="st">"terra"</span>,</span>
+<span id="cb2-8"><a href="#cb2-8"></a>    <span class="st">"GenSA"</span></span>
+<span id="cb2-9"><a href="#cb2-9"></a>    )</span>
+<span id="cb2-10"><a href="#cb2-10"></a>  )</span>
+<span id="cb2-11"><a href="#cb2-11"></a></span>
+<span id="cb2-12"><a href="#cb2-12"></a><span class="co"># load all the libraries up front</span></span>
+<span id="cb2-13"><a href="#cb2-13"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb2-14"><a href="#cb2-14"></a><span class="fu">library</span>(geodata)</span>
+<span id="cb2-15"><a href="#cb2-15"></a><span class="fu">library</span>(MODISTools)</span>
+<span id="cb2-16"><a href="#cb2-16"></a><span class="fu">library</span>(phenocamr)</span>
+<span id="cb2-17"><a href="#cb2-17"></a><span class="fu">library</span>(terra)</span>
+<span id="cb2-18"><a href="#cb2-18"></a><span class="fu">library</span>(GenSA)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="geospatial-processing-in-r" class="slide level2">
@@ -561,20 +624,16 @@ Koen Hufkens, PhD
 </ul>
 </div>
 </section>
-<section id="common-data-sources" class="slide level2">
-<h2>Common data sources</h2>
+<section id="apis-1" class="slide level2">
+<h2>APIs</h2>
 <div>
 <ul>
 <li class="fragment">ECMWF Copernicus Data Services (CDS) <code>{ecmwfr}*</code></li>
 <li class="fragment">NASA EarthData and digital archives <code>{MODISTools}*</code> &amp; <code>{appeears}*</code></li>
-<li class="fragment">National Ecosystem Observation Network (NEON) <code>{rnpn}</code></li>
-<li class="fragment">PEP725 <code>{phenor}*</code></li>
-<li class="fragment">ICOS <code>{icoscp}*</code> (partial support)</li>
-<li class="fragment">GBIF <code>{rgbif}</code></li>
 </ul>
 </div>
 </section>
-<section id="common-data-sources-1" class="slide level2">
+<section id="common-data-sources" class="slide level2">
 <h2>Common data sources</h2>
 <p>Scientific data repositories (open static data downloads or deposits)</p>
 <div>
@@ -588,142 +647,288 @@ Koen Hufkens, PhD
 <section id="downloading-dem-srtm-data" class="slide level2">
 <h2>Downloading DEM SRTM data</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2" data-code-line-numbers="|1|3-7|9-14|"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>geodata<span class="sc">::</span><span class="fu">elevation_3s</span>(</span>
-<span id="cb2-2"><a href="#cb2-2"></a>    <span class="at">lat =</span> <span class="fl">46.6756</span>,</span>
-<span id="cb2-3"><a href="#cb2-3"></a>    <span class="at">lon =</span> <span class="fl">7.85480</span>,</span>
-<span id="cb2-4"><a href="#cb2-4"></a>    <span class="at">path =</span> <span class="fu">tempdir</span>()</span>
-<span id="cb2-5"><a href="#cb2-5"></a>  )</span>
-<span id="cb2-6"><a href="#cb2-6"></a></span>
-<span id="cb2-7"><a href="#cb2-7"></a>dem <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(</span>
-<span id="cb2-8"><a href="#cb2-8"></a>  <span class="fu">file.path</span>(</span>
-<span id="cb2-9"><a href="#cb2-9"></a>    <span class="fu">tempdir</span>(),</span>
-<span id="cb2-10"><a href="#cb2-10"></a>    <span class="st">"srtm_38_03.tif"</span></span>
-<span id="cb2-11"><a href="#cb2-11"></a>    )</span>
-<span id="cb2-12"><a href="#cb2-12"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3" data-code-line-numbers="|1-5|7-11|"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>geodata<span class="sc">::</span><span class="fu">elevation_3s</span>(</span>
+<span id="cb3-2"><a href="#cb3-2"></a>    <span class="at">lat =</span> <span class="fl">46.6756</span>,</span>
+<span id="cb3-3"><a href="#cb3-3"></a>    <span class="at">lon =</span> <span class="fl">7.85480</span>,</span>
+<span id="cb3-4"><a href="#cb3-4"></a>    <span class="at">path =</span> <span class="fu">tempdir</span>()</span>
+<span id="cb3-5"><a href="#cb3-5"></a>  )</span>
+<span id="cb3-6"><a href="#cb3-6"></a></span>
+<span id="cb3-7"><a href="#cb3-7"></a>dem <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(</span>
+<span id="cb3-8"><a href="#cb3-8"></a>  <span class="fu">file.path</span>(</span>
+<span id="cb3-9"><a href="#cb3-9"></a>    <span class="fu">tempdir</span>(),</span>
+<span id="cb3-10"><a href="#cb3-10"></a>    <span class="st">"srtm_38_03.tif"</span></span>
+<span id="cb3-11"><a href="#cb3-11"></a>    )</span>
+<span id="cb3-12"><a href="#cb3-12"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="downloading-dem-srtm-data-1" class="slide level2">
-<h2>Downloading DEM SRTM data</h2>
+<section id="section-3" class="slide level2">
+<h2></h2>
 
-<img data-src="phenology_workshop_files/figure-revealjs/unnamed-chunk-5-1.png" width="960" class="r-stretch"></section>
+<img data-src="phenology_workshop_files/figure-revealjs/unnamed-chunk-9-1.png" width="960" class="r-stretch"></section>
+<section id="section-4" class="slide level2">
+<h2></h2>
+<p>Listing data</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># list all products</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a>MODISTools<span class="sc">::</span><span class="fu">mt_products</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="section-5" class="slide level2">
+<h2></h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>        product
+1        Daymet
+2  ECO4ESIPTJPL
+3       ECO4WUE
+4        GEDI03
+5      GEDI04_B
+6       MCD12Q1
+7       MCD12Q2
+8      MCD15A2H
+9      MCD15A3H
+10      MCD19A3
+11       MCD43A
+12      MCD43A1
+13      MCD43A4
+14      MCD64A1
+15      MOD09A1
+16      MOD11A2
+17      MOD13Q1
+18      MOD14A2
+19     MOD15A2H
+20      MOD16A2
+21    MOD16A2GF
+22     MOD17A2H
+23   MOD17A2HGF
+24   MOD17A3HGF
+25      MOD21A2
+26       MOD44B
+27      MYD09A1
+28      MYD11A2
+29      MYD13Q1
+30      MYD14A2
+31     MYD15A2H
+32      MYD16A2
+33    MYD16A2GF
+34     MYD17A2H
+35   MYD17A2HGF
+36   MYD17A3HGF
+37      MYD21A2
+38       SIF005
+39      SIF_ANN
+40    SPL3SMP_E
+41     SPL4CMDL
+42      VNP09A1
+43      VNP09H1
+44      VNP13A1
+45     VNP15A2H
+46      VNP21A2
+47      VNP22Q2
+                                                                                   description
+1           Daily Surface Weather Data (Daymet) on a 1-km Grid for North America, Version 4 R1
+2                         ECOSTRESS Evaporative Stress Index PT-JPL (ESI) Daily L4 Global 70 m
+3                                    ECOSTRESS Water Use Efficiency (WUE) Daily L4 Global 70 m
+4                          GEDI Gridded Land Surface Metrics (LSM) L3 1km EASE-Grid, Version 2
+5               GEDI Gridded Aboveground Biomass Density (AGBD) L4B 1km EASE-Grid, Version 2.1
+6                        MODIS/Terra+Aqua Land Cover Type (LC) Yearly L3 Global 500 m SIN Grid
+7                   MODIS/Terra+Aqua Land Cover Dynamics (LCD) Yearly L3 Global 500 m SIN Grid
+8             MODIS/Terra+Aqua Leaf Area Index/FPAR (LAI/FPAR)  8-Day L4 Global 500 m SIN Grid
+9              MODIS/Terra+Aqua Leaf Area Index/FPAR (LAI/FPAR) 4-Day L4 Global 500 m SIN Grid
+10                MODIS/Terra+Aqua BRDF Model Parameters (MAIAC) 8-Day L3 Global 1 km SIN Grid
+11    MODIS/Terra+Aqua BRDF and Calculated Albedo (BRDF/MCD43A) 16-Day L3 Global 500m SIN Grid
+12         MODIS/Terra+Aqua BRDF/Albedo Model Parameters (BRDF) 16-Day L3 Global 500m SIN Grid
+13      MODIS/Terra+Aqua Nadir BRDF-Adjusted Reflectance (NBAR) Daily L3 Global 500 m SIN Grid
+14                 MODIS/Terra+Aqua Burned Area (Burned Area) Monthly L3 Global 500 m SIN Grid
+15                        MODIS/Terra Surface Reflectance (SREF) 8-Day L3 Global 500m SIN Grid
+16     MODIS/Terra Land Surface Temperature and Emissivity (LST) 8-Day L3 Global 1 km SIN Grid
+17                    MODIS/Terra Vegetation Indices (NDVI/EVI) 16-Day L3 Global 250m SIN Grid
+18                     MODIS/Terra Thermal Anomalies/Fire (Fire) 8-Day L3 Global 1 km SIN Grid
+19                  MODIS/Terra Leaf Area Index/FPAR (LAI/FPAR) 8-Day L4 Global 500 m SIN Grid
+20                      MODIS/Terra Net Evapotranspiration (ET) 8-Day L4 Global 500 m SIN Grid
+21           MODIS/Terra Net Evapotranspiration Gap-Filled (ET) 8-Day L4 Global 500 m SIN Grid
+22                 MODIS/Terra Gross Primary Productivity (GPP) 8-Day L4 Global 500 m SIN Grid
+23      MODIS/Terra Gross Primary Productivity Gap-Filled (GPP) 8-Day L4 Global 500 m SIN Grid
+24         MODIS/Terra Net Primary Production Gap-Filled (NPP) Yearly L4 Global 500 m SIN Grid
+25 MODIS/Terra Land Surface Temperature/3-Band Emissivity (LSTE) 8-Day L3 Global 1 km SIN Grid
+26              MODIS/Terra Vegetation Continuous Fields (VCF) Yearly L3 Global 250 m SIN Grid
+27                         MODIS/Aqua Surface Reflectance (SREF) 8-Day L3 Global 500m SIN Grid
+28      MODIS/Aqua Land Surface Temperature and Emissivity (LST) 8-Day L3 Global 1 km SIN Grid
+29                     MODIS/Aqua Vegetation Indices (NDVI/EVI) 16-Day L3 Global 250m SIN Grid
+30                      MODIS/Aqua Thermal Anomalies/Fire (Fire) 8-Day L3 Global 1 km SIN Grid
+31                   MODIS/Aqua Leaf Area Index/FPAR (LAI/FPAR) 8-Day L4 Global 500 m SIN Grid
+32                       MODIS/Aqua Net Evapotranspiration (ET) 8-Day L4 Global 500 m SIN Grid
+33            MODIS/Aqua Net Evapotranspiration Gap-Filled (ET) 8-Day L4 Global 500 m SIN Grid
+34                  MODIS/Aqua Gross Primary Productivity (GPP) 8-Day L4 Global 500 m SIN Grid
+35       MODIS/Aqua Gross Primary Productivity Gap-Filled (GPP) 8-Day L4 Global 500 m SIN Grid
+36          MODIS/Aqua Net Primary Production Gap-Filled (NPP) Yearly L4 Global 500 m SIN Grid
+37  MODIS/Aqua Land Surface Temperature/3-Band Emissivity (LSTE) 8-Day L3 Global 1 km SIN Grid
+38                              SIF Estimates from Fused SCIAMACHY and GOME-2 (SIF), Version 2
+39                                     SIF Estimates from OCO-2 SIF and MODIS (SIF), Version 2
+40                   SMAP Enhanced Radiometer Soil Moisture (SM) Daily L3 Global 9km EASE-Grid
+41                     SMAP Carbon Net Ecosystem Exchange (NEE) Daily L4 Global 9 km EASE-Grid
+42                        VIIRS/S-NPP Surface Reflectance (SREF) 8-Day L3 Global 1 km SIN Grid
+43                        VIIRS/S-NPP Surface Reflectance (SREF) 8-Day L3 Global 500m SIN Grid
+44                    VIIRS/S-NPP Vegetation Indices (NDVI/EVI) 16-Day L3 Global 500m SIN Grid
+45                  VIIRS/S-NPP Leaf Area Index/FPAR (LAI/FPAR) 8-Day L4 Global 500 m SIN Grid
+46    VIIRS/S-NPP Land Surface Temperature and Emissivity (LSTE) 8-Day L3 Global 1 km SIN Grid
+47                       VIIRS/S-NPP Land Cover Dynamics (LCD) Yearly L3 Global 500 m SIN Grid
+   frequency resolution_meters
+1      1 day              1000
+2     Varies                70
+3     Varies                70
+4   One time              1000
+5   One time              1000
+6     1 year               500
+7     1 year               500
+8      8 day               500
+9      4 day               500
+10     8 day              1000
+11     1 day               500
+12     1 day               500
+13     1 day               500
+14   Monthly               500
+15     8 day               500
+16     8 day              1000
+17    16 day               250
+18     8 day              1000
+19     8 day               500
+20     8 day               500
+21     8 day               500
+22     8 day               500
+23     8 day               500
+24    1 year               500
+25     8 day              1000
+26    1 year               250
+27     8 day               500
+28     8 day              1000
+29    16 day               250
+30     8 day              1000
+31     8 day               500
+32     8 day               500
+33     8 day               500
+34     8 day               500
+35     8 day               500
+36    1 year               500
+37     8 day              1000
+38   Monthly              5000
+39    16 day              5000
+40     1 day              9000
+41     1 day              9000
+42     8 day              1000
+43     8 day               500
+44    16 day               500
+45     8 day               500
+46     8 day              1000
+47    1 year               500</code></pre>
+</div>
+</div>
+</section>
 <section id="downloading-modis-data" class="slide level2">
 <h2>Downloading MODIS data</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># list all products</span></span>
-<span id="cb3-2"><a href="#cb3-2"></a>MODISTools<span class="sc">::</span><span class="fu">mt_products</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6" data-code-line-numbers="|2|3-4|5|6-7|8-9|10|11|"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>phenology <span class="ot">&lt;-</span> MODISTools<span class="sc">::</span><span class="fu">mt_subset</span>(</span>
+<span id="cb6-2"><a href="#cb6-2"></a>  <span class="at">product =</span> <span class="st">"MCD12Q2"</span>,</span>
+<span id="cb6-3"><a href="#cb6-3"></a>  <span class="at">lat =</span> <span class="fl">46.6756</span>,</span>
+<span id="cb6-4"><a href="#cb6-4"></a>  <span class="at">lon =</span> <span class="fl">7.85480</span>,</span>
+<span id="cb6-5"><a href="#cb6-5"></a>  <span class="at">band =</span> <span class="st">"Greenup.Num_Modes_01"</span>,</span>
+<span id="cb6-6"><a href="#cb6-6"></a>  <span class="at">start =</span> <span class="st">"2012-01-01"</span>,</span>
+<span id="cb6-7"><a href="#cb6-7"></a>  <span class="at">end =</span> <span class="st">"2012-12-31"</span>,</span>
+<span id="cb6-8"><a href="#cb6-8"></a>  <span class="at">km_lr =</span> <span class="dv">100</span>,</span>
+<span id="cb6-9"><a href="#cb6-9"></a>  <span class="at">km_ab =</span> <span class="dv">100</span>,</span>
+<span id="cb6-10"><a href="#cb6-10"></a>  <span class="at">site_name =</span> <span class="st">"swiss"</span>,</span>
+<span id="cb6-11"><a href="#cb6-11"></a>  <span class="at">internal =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb6-12"><a href="#cb6-12"></a>  <span class="at">progress =</span> <span class="cn">TRUE</span></span>
+<span id="cb6-13"><a href="#cb6-13"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="downloading-modis-data-1" class="slide level2">
-<h2>Downloading MODIS data</h2>
-<h3 id="listing-products">listing products</h3>
-</section>
-<section id="downloading-modis-data-2" class="slide level2">
-<h2>Downloading MODIS data</h2>
-<h3 id="grab-the-data">grab the data</h3>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb4" data-code-line-numbers="|2|3-4|5|6-7|8-9|10|11|"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>phenology <span class="ot">&lt;-</span> MODISTools<span class="sc">::</span><span class="fu">mt_subset</span>(</span>
-<span id="cb4-2"><a href="#cb4-2"></a>  <span class="at">product =</span> <span class="st">"MCD12Q2"</span>,</span>
-<span id="cb4-3"><a href="#cb4-3"></a>  <span class="at">lat =</span> <span class="fl">46.6756</span>,</span>
-<span id="cb4-4"><a href="#cb4-4"></a>  <span class="at">lon =</span> <span class="fl">7.85480</span>,</span>
-<span id="cb4-5"><a href="#cb4-5"></a>  <span class="at">band =</span> <span class="st">"Greenup.Num_Modes_01"</span>,</span>
-<span id="cb4-6"><a href="#cb4-6"></a>  <span class="at">start =</span> <span class="st">"2012-01-01"</span>,</span>
-<span id="cb4-7"><a href="#cb4-7"></a>  <span class="at">end =</span> <span class="st">"2012-12-31"</span>,</span>
-<span id="cb4-8"><a href="#cb4-8"></a>  <span class="at">km_lr =</span> <span class="dv">100</span>,</span>
-<span id="cb4-9"><a href="#cb4-9"></a>  <span class="at">km_ab =</span> <span class="dv">100</span>,</span>
-<span id="cb4-10"><a href="#cb4-10"></a>  <span class="at">site_name =</span> <span class="st">"swiss"</span>,</span>
-<span id="cb4-11"><a href="#cb4-11"></a>  <span class="at">internal =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb4-12"><a href="#cb4-12"></a>  <span class="at">progress =</span> <span class="cn">TRUE</span></span>
-<span id="cb4-13"><a href="#cb4-13"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="downloading-modis-data-3" class="slide level2">
-<h2>Downloading MODIS data</h2>
-<h3 id="grab-the-data-1">grab the data</h3>
+<section id="section-6" class="slide level2">
+<h2></h2>
 <p>If downloads are too slow data can be downloaded from: https://github.com/bluegreen-labs/handful_of_pixels/raw/main/data/phenology_2012.rds</p>
 </section>
-<section id="downloading-modis-data-4" class="slide level2">
-<h2>Downloading MODIS data</h2>
-<h3 id="reformatting">reformatting</h3>
+<section id="section-7" class="slide level2">
+<h2></h2>
 <p>Converting the dates, and the format</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5" data-code-line-numbers="|1-6|8-11|"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>phenology <span class="ot">&lt;-</span> phenology <span class="sc">|&gt;</span></span>
-<span id="cb5-2"><a href="#cb5-2"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb5-3"><a href="#cb5-3"></a>    <span class="at">value =</span> <span class="fu">ifelse</span>(value <span class="sc">&gt;</span> <span class="dv">32656</span>, <span class="cn">NA</span>, value),</span>
-<span id="cb5-4"><a href="#cb5-4"></a>    <span class="at">value =</span> <span class="fu">as.numeric</span>(<span class="fu">format</span>(<span class="fu">as.Date</span>(<span class="st">"1970-01-01"</span>) <span class="sc">+</span> value, <span class="st">"%j"</span>)),</span>
-<span id="cb5-5"><a href="#cb5-5"></a>    <span class="at">value =</span> <span class="fu">ifelse</span>(value <span class="sc">&lt;</span> <span class="dv">200</span>, value, <span class="cn">NA</span>)</span>
-<span id="cb5-6"><a href="#cb5-6"></a>  )</span>
-<span id="cb5-7"><a href="#cb5-7"></a></span>
-<span id="cb5-8"><a href="#cb5-8"></a><span class="co"># convert to raster format</span></span>
-<span id="cb5-9"><a href="#cb5-9"></a>phenology_raster <span class="ot">&lt;-</span> MODISTools<span class="sc">::</span><span class="fu">mt_to_terra</span>(</span>
-<span id="cb5-10"><a href="#cb5-10"></a>  phenology,</span>
-<span id="cb5-11"><a href="#cb5-11"></a>  <span class="at">reproject =</span> <span class="cn">TRUE</span></span>
-<span id="cb5-12"><a href="#cb5-12"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7" data-code-line-numbers="|1-6|8-11|"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>phenology <span class="ot">&lt;-</span> phenology <span class="sc">|&gt;</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb7-3"><a href="#cb7-3"></a>    <span class="at">value =</span> <span class="fu">ifelse</span>(value <span class="sc">&gt;</span> <span class="dv">32656</span>, <span class="cn">NA</span>, value),</span>
+<span id="cb7-4"><a href="#cb7-4"></a>    <span class="at">value =</span> <span class="fu">as.numeric</span>(<span class="fu">format</span>(<span class="fu">as.Date</span>(<span class="st">"1970-01-01"</span>) <span class="sc">+</span> value, <span class="st">"%j"</span>)),</span>
+<span id="cb7-5"><a href="#cb7-5"></a>    <span class="at">value =</span> <span class="fu">ifelse</span>(value <span class="sc">&lt;</span> <span class="dv">200</span>, value, <span class="cn">NA</span>)</span>
+<span id="cb7-6"><a href="#cb7-6"></a>  )</span>
+<span id="cb7-7"><a href="#cb7-7"></a></span>
+<span id="cb7-8"><a href="#cb7-8"></a><span class="co"># convert to raster format</span></span>
+<span id="cb7-9"><a href="#cb7-9"></a>phenology_raster <span class="ot">&lt;-</span> MODISTools<span class="sc">::</span><span class="fu">mt_to_terra</span>(</span>
+<span id="cb7-10"><a href="#cb7-10"></a>  phenology,</span>
+<span id="cb7-11"><a href="#cb7-11"></a>  <span class="at">reproject =</span> <span class="cn">TRUE</span></span>
+<span id="cb7-12"><a href="#cb7-12"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="downloading-modis-data-5" class="slide level2">
-<h2>Downloading MODIS data</h2>
-<h3 id="data-vizualization">data vizualization</h3>
+<section id="section-8" class="slide level2">
+<h2></h2>
 <p>Visualizing the data!</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">plot</span>(phenology_raster)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">plot</span>(phenology_raster)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="phenology_workshop_files/figure-revealjs/unnamed-chunk-10-1.png" width="960" class="r-stretch"></section>
-<section id="resample" class="slide level2">
-<h2>Resample</h2>
+<img data-src="phenology_workshop_files/figure-revealjs/unnamed-chunk-14-1.png" width="960" class="r-stretch"></section>
+<section id="section-9" class="slide level2">
+<h2></h2>
+<p>Resampling DEM for comparison</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7" data-code-line-numbers="|1-5|7-11|"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>dem <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">resample</span>(</span>
-<span id="cb7-2"><a href="#cb7-2"></a>  <span class="at">x =</span> dem,</span>
-<span id="cb7-3"><a href="#cb7-3"></a>  <span class="at">y =</span> phenology_raster,</span>
-<span id="cb7-4"><a href="#cb7-4"></a>  <span class="at">method =</span> <span class="st">"average"</span></span>
-<span id="cb7-5"><a href="#cb7-5"></a>)</span>
-<span id="cb7-6"><a href="#cb7-6"></a></span>
-<span id="cb7-7"><a href="#cb7-7"></a>dem <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">mask</span>(</span>
-<span id="cb7-8"><a href="#cb7-8"></a>  dem,</span>
-<span id="cb7-9"><a href="#cb7-9"></a>  <span class="fu">is.na</span>(phenology_raster),</span>
-<span id="cb7-10"><a href="#cb7-10"></a>  <span class="at">maskvalues =</span> <span class="cn">TRUE</span></span>
-<span id="cb7-11"><a href="#cb7-11"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9" data-code-line-numbers="|1-5|7-11|"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>dem <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">resample</span>(</span>
+<span id="cb9-2"><a href="#cb9-2"></a>  <span class="at">x =</span> dem,</span>
+<span id="cb9-3"><a href="#cb9-3"></a>  <span class="at">y =</span> phenology_raster,</span>
+<span id="cb9-4"><a href="#cb9-4"></a>  <span class="at">method =</span> <span class="st">"average"</span></span>
+<span id="cb9-5"><a href="#cb9-5"></a>)</span>
+<span id="cb9-6"><a href="#cb9-6"></a></span>
+<span id="cb9-7"><a href="#cb9-7"></a>dem <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">mask</span>(</span>
+<span id="cb9-8"><a href="#cb9-8"></a>  dem,</span>
+<span id="cb9-9"><a href="#cb9-9"></a>  <span class="fu">is.na</span>(phenology_raster),</span>
+<span id="cb9-10"><a href="#cb9-10"></a>  <span class="at">maskvalues =</span> <span class="cn">TRUE</span></span>
+<span id="cb9-11"><a href="#cb9-11"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="combine-data" class="slide level2">
-<h2>Combine data</h2>
+<section id="section-10" class="slide level2">
+<h2></h2>
+<p>Combine data in one dataframe!</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8" data-code-line-numbers="|2-3|"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>sct_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb8-2"><a href="#cb8-2"></a>  <span class="at">altitude =</span> <span class="fu">as.vector</span>(dem),</span>
-<span id="cb8-3"><a href="#cb8-3"></a>  <span class="at">doy =</span> <span class="fu">as.vector</span>(phenology_raster)</span>
-<span id="cb8-4"><a href="#cb8-4"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10" data-code-line-numbers="|2-3|"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>sct_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb10-2"><a href="#cb10-2"></a>  <span class="at">altitude =</span> <span class="fu">as.vector</span>(dem),</span>
+<span id="cb10-3"><a href="#cb10-3"></a>  <span class="at">doy =</span> <span class="fu">as.vector</span>(phenology_raster)</span>
+<span id="cb10-4"><a href="#cb10-4"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="plot-the-data" class="slide level2">
-<h2>Plot the data</h2>
+<section id="section-11" class="slide level2">
+<h2></h2>
 <div class="columns" data-align="center">
 <div class="column" style="width:50%;">
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb9" data-code-line-numbers="|2|3|"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">ggplot</span>(</span>
-<span id="cb9-2"><a href="#cb9-2"></a>  <span class="at">data =</span> sct_df,</span>
-<span id="cb9-3"><a href="#cb9-3"></a>  <span class="fu">aes</span>(altitude,doy)</span>
-<span id="cb9-4"><a href="#cb9-4"></a>  ) <span class="sc">+</span></span>
-<span id="cb9-5"><a href="#cb9-5"></a>  <span class="fu">geom_hex</span>() <span class="sc">+</span></span>
-<span id="cb9-6"><a href="#cb9-6"></a>  <span class="fu">scale_fill_viridis_c</span>(</span>
-<span id="cb9-7"><a href="#cb9-7"></a>    <span class="at">trans=</span><span class="st">"log10"</span></span>
-<span id="cb9-8"><a href="#cb9-8"></a>    ) <span class="sc">+</span></span>
-<span id="cb9-9"><a href="#cb9-9"></a>  <span class="fu">geom_smooth</span>(</span>
-<span id="cb9-10"><a href="#cb9-10"></a>    <span class="at">method =</span> <span class="st">"lm"</span>,</span>
-<span id="cb9-11"><a href="#cb9-11"></a>    <span class="at">se =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb9-12"><a href="#cb9-12"></a>    <span class="at">colour =</span> <span class="st">"white"</span>,</span>
-<span id="cb9-13"><a href="#cb9-13"></a>    <span class="at">lty =</span> <span class="dv">2</span></span>
-<span id="cb9-14"><a href="#cb9-14"></a>  ) <span class="sc">+</span></span>
-<span id="cb9-15"><a href="#cb9-15"></a>  <span class="fu">labs</span>(</span>
-<span id="cb9-16"><a href="#cb9-16"></a>    <span class="at">x =</span> <span class="st">"altitude (m)"</span>,</span>
-<span id="cb9-17"><a href="#cb9-17"></a>    <span class="at">y =</span> <span class="st">"greenup (DOY)"</span></span>
-<span id="cb9-18"><a href="#cb9-18"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11" data-code-line-numbers="|2|3|"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="fu">ggplot</span>(</span>
+<span id="cb11-2"><a href="#cb11-2"></a>  <span class="at">data =</span> sct_df,</span>
+<span id="cb11-3"><a href="#cb11-3"></a>  <span class="fu">aes</span>(altitude,doy)</span>
+<span id="cb11-4"><a href="#cb11-4"></a>  ) <span class="sc">+</span></span>
+<span id="cb11-5"><a href="#cb11-5"></a>  <span class="fu">geom_hex</span>() <span class="sc">+</span></span>
+<span id="cb11-6"><a href="#cb11-6"></a>  <span class="fu">scale_fill_viridis_c</span>(</span>
+<span id="cb11-7"><a href="#cb11-7"></a>    <span class="at">trans=</span><span class="st">"log10"</span></span>
+<span id="cb11-8"><a href="#cb11-8"></a>    ) <span class="sc">+</span></span>
+<span id="cb11-9"><a href="#cb11-9"></a>  <span class="fu">geom_smooth</span>(</span>
+<span id="cb11-10"><a href="#cb11-10"></a>    <span class="at">method =</span> <span class="st">"lm"</span>,</span>
+<span id="cb11-11"><a href="#cb11-11"></a>    <span class="at">se =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb11-12"><a href="#cb11-12"></a>    <span class="at">colour =</span> <span class="st">"white"</span>,</span>
+<span id="cb11-13"><a href="#cb11-13"></a>    <span class="at">lty =</span> <span class="dv">2</span></span>
+<span id="cb11-14"><a href="#cb11-14"></a>  ) <span class="sc">+</span></span>
+<span id="cb11-15"><a href="#cb11-15"></a>  <span class="fu">labs</span>(</span>
+<span id="cb11-16"><a href="#cb11-16"></a>    <span class="at">x =</span> <span class="st">"altitude (m)"</span>,</span>
+<span id="cb11-17"><a href="#cb11-17"></a>    <span class="at">y =</span> <span class="st">"greenup (DOY)"</span></span>
+<span id="cb11-18"><a href="#cb11-18"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:50%;">
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="phenology_workshop_files/figure-revealjs/unnamed-chunk-14-1.png" style="width:100.0%"></p>
+<p><img data-src="phenology_workshop_files/figure-revealjs/unnamed-chunk-18-1.png" style="width:100.0%"></p>
 </figure>
 </div>
 </div>
@@ -731,11 +936,11 @@ Koen Hufkens, PhD
 </div>
 </div>
 </section>
-<section id="summary-stats" class="slide level2 smaller">
-<h2>Summary stats</h2>
+<section id="section-12" class="slide level2 smaller">
+<h2></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(doy <span class="sc">~</span> altitude, <span class="at">data =</span> sct_df)</span>
-<span id="cb10-2"><a href="#cb10-2"></a><span class="fu">print</span>(<span class="fu">summary</span>(fit))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(doy <span class="sc">~</span> altitude, <span class="at">data =</span> sct_df)</span>
+<span id="cb12-2"><a href="#cb12-2"></a><span class="fu">print</span>(<span class="fu">summary</span>(fit))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -762,17 +967,17 @@ F-statistic: 2.89e+05 on 1 and 145522 DF,  p-value: &lt; 2.2e-16</code></pre>
 </section>
 <section id="phenology-modelling" class="slide level2">
 <h2>Phenology modelling</h2>
-<p>Convert dates</p>
+<p>Download time series, calculate phenophases</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12" data-code-line-numbers="|2|3|4|5|6|7|8|"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>phenocamr<span class="sc">::</span><span class="fu">download_phenocam</span>(</span>
-<span id="cb12-2"><a href="#cb12-2"></a>  <span class="at">site =</span> <span class="st">"harvard$"</span>,</span>
-<span id="cb12-3"><a href="#cb12-3"></a>  <span class="at">veg_type =</span> <span class="st">"DB"</span>,</span>
-<span id="cb12-4"><a href="#cb12-4"></a>  <span class="at">roi_id =</span> <span class="st">"1000"</span>,</span>
-<span id="cb12-5"><a href="#cb12-5"></a>  <span class="at">daymet =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb12-6"><a href="#cb12-6"></a>  <span class="at">phenophase =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb12-7"><a href="#cb12-7"></a>  <span class="at">trim =</span> <span class="dv">2022</span>,</span>
-<span id="cb12-8"><a href="#cb12-8"></a>  <span class="at">out_dir =</span> <span class="fu">tempdir</span>()</span>
-<span id="cb12-9"><a href="#cb12-9"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14" data-code-line-numbers="|2|3|4|5|6|7|8|"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>phenocamr<span class="sc">::</span><span class="fu">download_phenocam</span>(</span>
+<span id="cb14-2"><a href="#cb14-2"></a>  <span class="at">site =</span> <span class="st">"harvard$"</span>,</span>
+<span id="cb14-3"><a href="#cb14-3"></a>  <span class="at">veg_type =</span> <span class="st">"DB"</span>,</span>
+<span id="cb14-4"><a href="#cb14-4"></a>  <span class="at">roi_id =</span> <span class="st">"1000"</span>,</span>
+<span id="cb14-5"><a href="#cb14-5"></a>  <span class="at">daymet =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb14-6"><a href="#cb14-6"></a>  <span class="at">phenophase =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb14-7"><a href="#cb14-7"></a>  <span class="at">trim =</span> <span class="dv">2022</span>,</span>
+<span id="cb14-8"><a href="#cb14-8"></a>  <span class="at">out_dir =</span> <span class="fu">tempdir</span>()</span>
+<span id="cb14-9"><a href="#cb14-9"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <aside class="notes">
 <p>This routine downloads the phenocam data for the deciduous broadleaf class, calculates the phenophases, and aligns the data with matching daymet data. I’ll use the daymet data in modelling. Although US centric the same routines apply for EU based modelling efforts. I fall back on DAYMET data for the ease of use.</p>
@@ -788,39 +993,40 @@ F-statistic: 2.89e+05 on 1 and 145522 DF,  p-value: &lt; 2.2e-16</code></pre>
           display:block!important;
       }</style></aside>
 </section>
-<section id="phenology-modelling-1" class="slide level2">
-<h2>Phenology modelling</h2>
+<section id="section-13" class="slide level2">
+<h2></h2>
+<p>Read the data</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>harvard_phenocam_data <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(</span>
-<span id="cb13-2"><a href="#cb13-2"></a>  <span class="fu">file.path</span>(<span class="fu">tempdir</span>(), <span class="st">"harvard_DB_1000_3day.csv"</span>), </span>
-<span id="cb13-3"><a href="#cb13-3"></a>  <span class="at">comment =</span> <span class="st">"#"</span></span>
-<span id="cb13-4"><a href="#cb13-4"></a>  )</span>
-<span id="cb13-5"><a href="#cb13-5"></a></span>
-<span id="cb13-6"><a href="#cb13-6"></a><span class="co"># return mean daily temperature as well</span></span>
-<span id="cb13-7"><a href="#cb13-7"></a><span class="co"># as formal dates (for plotting)</span></span>
-<span id="cb13-8"><a href="#cb13-8"></a>harvard_temp <span class="ot">&lt;-</span> harvard_phenocam_data <span class="sc">|&gt;</span></span>
-<span id="cb13-9"><a href="#cb13-9"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
-<span id="cb13-10"><a href="#cb13-10"></a>    <span class="at">tmean =</span> (tmax..deg.c. <span class="sc">+</span> tmin..deg.c.)<span class="sc">/</span><span class="dv">2</span>,</span>
-<span id="cb13-11"><a href="#cb13-11"></a>    <span class="at">date =</span> <span class="fu">as.Date</span>(date),</span>
-<span id="cb13-12"><a href="#cb13-12"></a>    <span class="at">year =</span> <span class="fu">as.numeric</span>(<span class="fu">format</span>(date, <span class="st">"%Y"</span>))</span>
-<span id="cb13-13"><a href="#cb13-13"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>harvard_phenocam_data <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(</span>
+<span id="cb15-2"><a href="#cb15-2"></a>  <span class="fu">file.path</span>(<span class="fu">tempdir</span>(), <span class="st">"harvard_DB_1000_3day.csv"</span>), </span>
+<span id="cb15-3"><a href="#cb15-3"></a>  <span class="at">comment =</span> <span class="st">"#"</span></span>
+<span id="cb15-4"><a href="#cb15-4"></a>  )</span>
+<span id="cb15-5"><a href="#cb15-5"></a></span>
+<span id="cb15-6"><a href="#cb15-6"></a><span class="co"># return mean daily temperature as well</span></span>
+<span id="cb15-7"><a href="#cb15-7"></a><span class="co"># as formal dates (for plotting)</span></span>
+<span id="cb15-8"><a href="#cb15-8"></a>harvard_temp <span class="ot">&lt;-</span> harvard_phenocam_data <span class="sc">|&gt;</span></span>
+<span id="cb15-9"><a href="#cb15-9"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
+<span id="cb15-10"><a href="#cb15-10"></a>    <span class="at">tmean =</span> (tmax..deg.c. <span class="sc">+</span> tmin..deg.c.)<span class="sc">/</span><span class="dv">2</span>,</span>
+<span id="cb15-11"><a href="#cb15-11"></a>    <span class="at">date =</span> <span class="fu">as.Date</span>(date),</span>
+<span id="cb15-12"><a href="#cb15-12"></a>    <span class="at">year =</span> <span class="fu">as.numeric</span>(<span class="fu">format</span>(date, <span class="st">"%Y"</span>))</span>
+<span id="cb15-13"><a href="#cb15-13"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="phenology-modelling-2" class="slide level2">
-<h2>Phenology modelling</h2>
+<section id="section-14" class="slide level2">
+<h2></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="co"># calculated phenology dates</span></span>
-<span id="cb14-2"><a href="#cb14-2"></a>harvard_phenology <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(</span>
-<span id="cb14-3"><a href="#cb14-3"></a>  <span class="fu">file.path</span>(</span>
-<span id="cb14-4"><a href="#cb14-4"></a>    <span class="fu">tempdir</span>(),</span>
-<span id="cb14-5"><a href="#cb14-5"></a>    <span class="st">"harvard_DB_1000_3day_transition_dates.csv"</span></span>
-<span id="cb14-6"><a href="#cb14-6"></a>    ),</span>
-<span id="cb14-7"><a href="#cb14-7"></a>  <span class="at">comment =</span> <span class="st">"#"</span></span>
-<span id="cb14-8"><a href="#cb14-8"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb14-9"><a href="#cb14-9"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(</span>
-<span id="cb14-10"><a href="#cb14-10"></a>    direction <span class="sc">==</span> <span class="st">"rising"</span>,</span>
-<span id="cb14-11"><a href="#cb14-11"></a>    gcc_value <span class="sc">==</span> <span class="st">"gcc_90"</span></span>
-<span id="cb14-12"><a href="#cb14-12"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="co"># calculated phenology dates</span></span>
+<span id="cb16-2"><a href="#cb16-2"></a>harvard_phenology <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(</span>
+<span id="cb16-3"><a href="#cb16-3"></a>  <span class="fu">file.path</span>(</span>
+<span id="cb16-4"><a href="#cb16-4"></a>    <span class="fu">tempdir</span>(),</span>
+<span id="cb16-5"><a href="#cb16-5"></a>    <span class="st">"harvard_DB_1000_3day_transition_dates.csv"</span></span>
+<span id="cb16-6"><a href="#cb16-6"></a>    ),</span>
+<span id="cb16-7"><a href="#cb16-7"></a>  <span class="at">comment =</span> <span class="st">"#"</span></span>
+<span id="cb16-8"><a href="#cb16-8"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb16-9"><a href="#cb16-9"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(</span>
+<span id="cb16-10"><a href="#cb16-10"></a>    direction <span class="sc">==</span> <span class="st">"rising"</span>,</span>
+<span id="cb16-11"><a href="#cb16-11"></a>    gcc_value <span class="sc">==</span> <span class="st">"gcc_90"</span></span>
+<span id="cb16-12"><a href="#cb16-12"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <aside class="notes">
 <p>This routine reads in the time series and calculated phenology dates, filtering out only the relevant spring characteristics.</p>
@@ -836,44 +1042,45 @@ F-statistic: 2.89e+05 on 1 and 145522 DF,  p-value: &lt; 2.2e-16</code></pre>
           display:block!important;
       }</style></aside>
 </section>
-<section id="phenology-modelling-3" class="slide level2">
-<h2>Phenology modelling</h2>
-<p>Select threshold days</p>
+<section id="section-15" class="slide level2">
+<h2></h2>
+<p>Select phenophase and convert to year, doy</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>harvard_phenology <span class="ot">&lt;-</span> harvard_phenology <span class="sc">|&gt;</span></span>
-<span id="cb15-2"><a href="#cb15-2"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb15-3"><a href="#cb15-3"></a>    <span class="at">doy =</span> <span class="fu">as.numeric</span>(<span class="fu">format</span>(<span class="fu">as.Date</span>(transition_25),<span class="st">"%j"</span>)),</span>
-<span id="cb15-4"><a href="#cb15-4"></a>    <span class="at">year =</span> <span class="fu">as.numeric</span>(<span class="fu">format</span>(<span class="fu">as.Date</span>(transition_25),<span class="st">"%Y"</span>))</span>
-<span id="cb15-5"><a href="#cb15-5"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb15-6"><a href="#cb15-6"></a>  <span class="fu">select</span>(</span>
-<span id="cb15-7"><a href="#cb15-7"></a>    year,</span>
-<span id="cb15-8"><a href="#cb15-8"></a>    doy,</span>
-<span id="cb15-9"><a href="#cb15-9"></a>    transition_25,</span>
-<span id="cb15-10"><a href="#cb15-10"></a>    threshold_25</span>
-<span id="cb15-11"><a href="#cb15-11"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>harvard_phenology <span class="ot">&lt;-</span> harvard_phenology <span class="sc">|&gt;</span></span>
+<span id="cb17-2"><a href="#cb17-2"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb17-3"><a href="#cb17-3"></a>    <span class="at">doy =</span> <span class="fu">as.numeric</span>(<span class="fu">format</span>(<span class="fu">as.Date</span>(transition_25),<span class="st">"%j"</span>)),</span>
+<span id="cb17-4"><a href="#cb17-4"></a>    <span class="at">year =</span> <span class="fu">as.numeric</span>(<span class="fu">format</span>(<span class="fu">as.Date</span>(transition_25),<span class="st">"%Y"</span>))</span>
+<span id="cb17-5"><a href="#cb17-5"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb17-6"><a href="#cb17-6"></a>  <span class="fu">select</span>(</span>
+<span id="cb17-7"><a href="#cb17-7"></a>    year,</span>
+<span id="cb17-8"><a href="#cb17-8"></a>    doy,</span>
+<span id="cb17-9"><a href="#cb17-9"></a>    transition_25,</span>
+<span id="cb17-10"><a href="#cb17-10"></a>    threshold_25</span>
+<span id="cb17-11"><a href="#cb17-11"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="phenology-model" class="slide level2">
-<h2>Phenology model</h2>
+<section id="section-16" class="slide level2">
+<h2></h2>
+<p>Define the GDD model</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16" data-code-line-numbers="|1|17|4-5|9|15|"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>gdd_model <span class="ot">&lt;-</span> <span class="cf">function</span>(temp, par) {</span>
-<span id="cb16-2"><a href="#cb16-2"></a>  <span class="co"># split out parameters from a simple</span></span>
-<span id="cb16-3"><a href="#cb16-3"></a>  <span class="co"># vector of parameter values</span></span>
-<span id="cb16-4"><a href="#cb16-4"></a>  temp_threshold <span class="ot">&lt;-</span> par[<span class="dv">1</span>]</span>
-<span id="cb16-5"><a href="#cb16-5"></a>  gdd_crit <span class="ot">&lt;-</span> par[<span class="dv">2</span>]</span>
-<span id="cb16-6"><a href="#cb16-6"></a>  </span>
-<span id="cb16-7"><a href="#cb16-7"></a>  <span class="co"># accumulate growing degree days for</span></span>
-<span id="cb16-8"><a href="#cb16-8"></a>  <span class="co"># temperature data</span></span>
-<span id="cb16-9"><a href="#cb16-9"></a>  gdd <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(<span class="fu">ifelse</span>(temp <span class="sc">&gt;</span> temp_threshold, temp <span class="sc">-</span> temp_threshold, <span class="dv">0</span>))</span>
-<span id="cb16-10"><a href="#cb16-10"></a>  </span>
-<span id="cb16-11"><a href="#cb16-11"></a>  <span class="co"># figure out when the number of growing</span></span>
-<span id="cb16-12"><a href="#cb16-12"></a>  <span class="co"># degree days exceeds the minimum value</span></span>
-<span id="cb16-13"><a href="#cb16-13"></a>  <span class="co"># required for leaf development, only</span></span>
-<span id="cb16-14"><a href="#cb16-14"></a>  <span class="co"># return the first value</span></span>
-<span id="cb16-15"><a href="#cb16-15"></a>  doy <span class="ot">&lt;-</span> <span class="fu">unlist</span>(<span class="fu">which</span>(gdd <span class="sc">&gt;=</span> gdd_crit)[<span class="dv">1</span>])</span>
-<span id="cb16-16"><a href="#cb16-16"></a>  </span>
-<span id="cb16-17"><a href="#cb16-17"></a>  <span class="fu">return</span>(doy)</span>
-<span id="cb16-18"><a href="#cb16-18"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18" data-code-line-numbers="|1|17|4-5|9|15|"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>gdd_model <span class="ot">&lt;-</span> <span class="cf">function</span>(temp, par) {</span>
+<span id="cb18-2"><a href="#cb18-2"></a>  <span class="co"># split out parameters from a simple</span></span>
+<span id="cb18-3"><a href="#cb18-3"></a>  <span class="co"># vector of parameter values</span></span>
+<span id="cb18-4"><a href="#cb18-4"></a>  temp_threshold <span class="ot">&lt;-</span> par[<span class="dv">1</span>]</span>
+<span id="cb18-5"><a href="#cb18-5"></a>  gdd_crit <span class="ot">&lt;-</span> par[<span class="dv">2</span>]</span>
+<span id="cb18-6"><a href="#cb18-6"></a>  </span>
+<span id="cb18-7"><a href="#cb18-7"></a>  <span class="co"># accumulate growing degree days for</span></span>
+<span id="cb18-8"><a href="#cb18-8"></a>  <span class="co"># temperature data</span></span>
+<span id="cb18-9"><a href="#cb18-9"></a>  gdd <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(<span class="fu">ifelse</span>(temp <span class="sc">&gt;</span> temp_threshold, temp <span class="sc">-</span> temp_threshold, <span class="dv">0</span>))</span>
+<span id="cb18-10"><a href="#cb18-10"></a>  </span>
+<span id="cb18-11"><a href="#cb18-11"></a>  <span class="co"># figure out when the number of growing</span></span>
+<span id="cb18-12"><a href="#cb18-12"></a>  <span class="co"># degree days exceeds the minimum value</span></span>
+<span id="cb18-13"><a href="#cb18-13"></a>  <span class="co"># required for leaf development, only</span></span>
+<span id="cb18-14"><a href="#cb18-14"></a>  <span class="co"># return the first value</span></span>
+<span id="cb18-15"><a href="#cb18-15"></a>  doy <span class="ot">&lt;-</span> <span class="fu">unlist</span>(<span class="fu">which</span>(gdd <span class="sc">&gt;=</span> gdd_crit)[<span class="dv">1</span>])</span>
+<span id="cb18-16"><a href="#cb18-16"></a>  </span>
+<span id="cb18-17"><a href="#cb18-17"></a>  <span class="fu">return</span>(doy)</span>
+<span id="cb18-18"><a href="#cb18-18"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <aside class="notes">
 <p>Here I formulate a simple growing degree day model. With temperature as input, together with a list of parameters <code>par</code>, the threshold temperature and F* the critical growing degree days if exceeded should trigger phenology.</p>
@@ -889,18 +1096,18 @@ F-statistic: 2.89e+05 on 1 and 145522 DF,  p-value: &lt; 2.2e-16</code></pre>
           display:block!important;
       }</style></aside>
 </section>
-<section id="phenology-model-1" class="slide level2">
-<h2>Phenology model</h2>
-<p>Fixed parameters</p>
+<section id="section-17" class="slide level2">
+<h2></h2>
+<p>Run with fixed parameters</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17" data-code-line-numbers="|2|3-8|"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>prediction <span class="ot">&lt;-</span> harvard_temp <span class="sc">|&gt;</span></span>
-<span id="cb17-2"><a href="#cb17-2"></a>  <span class="fu">group_by</span>(year) <span class="sc">|&gt;</span></span>
-<span id="cb17-3"><a href="#cb17-3"></a>  <span class="fu">summarize</span>(</span>
-<span id="cb17-4"><a href="#cb17-4"></a>    <span class="at">pred =</span> <span class="fu">gdd_model</span>(</span>
-<span id="cb17-5"><a href="#cb17-5"></a>      <span class="at">temp =</span> tmean,</span>
-<span id="cb17-6"><a href="#cb17-6"></a>      <span class="at">par =</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">130</span>)</span>
-<span id="cb17-7"><a href="#cb17-7"></a>    )</span>
-<span id="cb17-8"><a href="#cb17-8"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19" data-code-line-numbers="|2|3-8|"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a>prediction <span class="ot">&lt;-</span> harvard_temp <span class="sc">|&gt;</span></span>
+<span id="cb19-2"><a href="#cb19-2"></a>  <span class="fu">group_by</span>(year) <span class="sc">|&gt;</span></span>
+<span id="cb19-3"><a href="#cb19-3"></a>  <span class="fu">summarize</span>(</span>
+<span id="cb19-4"><a href="#cb19-4"></a>    <span class="at">pred =</span> <span class="fu">gdd_model</span>(</span>
+<span id="cb19-5"><a href="#cb19-5"></a>      <span class="at">temp =</span> tmean,</span>
+<span id="cb19-6"><a href="#cb19-6"></a>      <span class="at">par =</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">130</span>)</span>
+<span id="cb19-7"><a href="#cb19-7"></a>    )</span>
+<span id="cb19-8"><a href="#cb19-8"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <aside class="notes">
 <p>We can now run the model on our data using a simple call, with ad-hoc parameters, say a temperature threshold of 5 degrees C, and a GDD F* threshold of 130. However, these parameters are ad-hoc and not optimized for our current dataset. To do so we need to find the optimal parameters for this problem. This will require… parameter optimization.</p>
@@ -916,10 +1123,10 @@ F-statistic: 2.89e+05 on 1 and 145522 DF,  p-value: &lt; 2.2e-16</code></pre>
           display:block!important;
       }</style></aside>
 </section>
-<section id="phenology-model-2" class="slide level2">
-<h2>Phenology model</h2>
+<section id="section-18" class="slide level2">
+<h2></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="fu">print</span>(prediction)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="fu">print</span>(prediction)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 15 × 2
     year  pred
@@ -942,134 +1149,136 @@ F-statistic: 2.89e+05 on 1 and 145522 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
 </section>
-<section id="cost-function" class="slide level2">
-<h2>Cost function</h2>
+<section id="section-19" class="slide level2">
+<h2></h2>
+<p>Defining a cost function</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20" data-code-line-numbers="|3|6-7|9-16|"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="co"># run model and compare to true values</span></span>
-<span id="cb20-2"><a href="#cb20-2"></a><span class="co"># returns the RMSE</span></span>
-<span id="cb20-3"><a href="#cb20-3"></a>rmse_gdd <span class="ot">&lt;-</span> <span class="cf">function</span>(par, data) {</span>
-<span id="cb20-4"><a href="#cb20-4"></a>  </span>
-<span id="cb20-5"><a href="#cb20-5"></a>  <span class="co"># split out data</span></span>
-<span id="cb20-6"><a href="#cb20-6"></a>  drivers <span class="ot">&lt;-</span> data<span class="sc">$</span>drivers</span>
-<span id="cb20-7"><a href="#cb20-7"></a>  validation <span class="ot">&lt;-</span> data<span class="sc">$</span>validation</span>
-<span id="cb20-8"><a href="#cb20-8"></a>  </span>
-<span id="cb20-9"><a href="#cb20-9"></a>  <span class="co"># calculate phenology predictions</span></span>
-<span id="cb20-10"><a href="#cb20-10"></a>  <span class="co"># and put in a data frame</span></span>
-<span id="cb20-11"><a href="#cb20-11"></a>  predictions <span class="ot">&lt;-</span> drivers <span class="sc">|&gt;</span></span>
-<span id="cb20-12"><a href="#cb20-12"></a>    <span class="fu">group_by</span>(year) <span class="sc">|&gt;</span></span>
-<span id="cb20-13"><a href="#cb20-13"></a>    <span class="fu">summarise</span>(</span>
-<span id="cb20-14"><a href="#cb20-14"></a>      <span class="at">predictions =</span> <span class="fu">gdd_model</span>(</span>
-<span id="cb20-15"><a href="#cb20-15"></a>        <span class="at">temp =</span> tmean,</span>
-<span id="cb20-16"><a href="#cb20-16"></a>        <span class="at">par =</span> par</span>
-<span id="cb20-17"><a href="#cb20-17"></a>      )</span>
-<span id="cb20-18"><a href="#cb20-18"></a>    )</span>
-<span id="cb20-19"><a href="#cb20-19"></a>  </span>
-<span id="cb20-20"><a href="#cb20-20"></a>  predictions <span class="ot">&lt;-</span> <span class="fu">left_join</span>(predictions, validation, <span class="at">by =</span> <span class="st">"year"</span>)</span>
-<span id="cb20-21"><a href="#cb20-21"></a>  </span>
-<span id="cb20-22"><a href="#cb20-22"></a>  rmse <span class="ot">&lt;-</span> predictions <span class="sc">|&gt;</span></span>
-<span id="cb20-23"><a href="#cb20-23"></a>    <span class="fu">summarise</span>(</span>
-<span id="cb20-24"><a href="#cb20-24"></a>      <span class="at">rmse =</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((predictions <span class="sc">-</span> doy)<span class="sc">^</span><span class="dv">2</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
-<span id="cb20-25"><a href="#cb20-25"></a>    ) <span class="sc">|&gt;</span></span>
-<span id="cb20-26"><a href="#cb20-26"></a>    <span class="fu">pull</span>(rmse)</span>
-<span id="cb20-27"><a href="#cb20-27"></a>  </span>
-<span id="cb20-28"><a href="#cb20-28"></a>  <span class="co"># return rmse value</span></span>
-<span id="cb20-29"><a href="#cb20-29"></a>  <span class="fu">return</span>(rmse)</span>
-<span id="cb20-30"><a href="#cb20-30"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22" data-code-line-numbers="|3|6-7|9-16|"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="co"># run model and compare to true values</span></span>
+<span id="cb22-2"><a href="#cb22-2"></a><span class="co"># returns the RMSE</span></span>
+<span id="cb22-3"><a href="#cb22-3"></a>rmse_gdd <span class="ot">&lt;-</span> <span class="cf">function</span>(par, data) {</span>
+<span id="cb22-4"><a href="#cb22-4"></a>  </span>
+<span id="cb22-5"><a href="#cb22-5"></a>  <span class="co"># split out data</span></span>
+<span id="cb22-6"><a href="#cb22-6"></a>  drivers <span class="ot">&lt;-</span> data<span class="sc">$</span>drivers</span>
+<span id="cb22-7"><a href="#cb22-7"></a>  validation <span class="ot">&lt;-</span> data<span class="sc">$</span>validation</span>
+<span id="cb22-8"><a href="#cb22-8"></a>  </span>
+<span id="cb22-9"><a href="#cb22-9"></a>  <span class="co"># calculate phenology predictions</span></span>
+<span id="cb22-10"><a href="#cb22-10"></a>  <span class="co"># and put in a data frame</span></span>
+<span id="cb22-11"><a href="#cb22-11"></a>  predictions <span class="ot">&lt;-</span> drivers <span class="sc">|&gt;</span></span>
+<span id="cb22-12"><a href="#cb22-12"></a>    <span class="fu">group_by</span>(year) <span class="sc">|&gt;</span></span>
+<span id="cb22-13"><a href="#cb22-13"></a>    <span class="fu">summarise</span>(</span>
+<span id="cb22-14"><a href="#cb22-14"></a>      <span class="at">predictions =</span> <span class="fu">gdd_model</span>(</span>
+<span id="cb22-15"><a href="#cb22-15"></a>        <span class="at">temp =</span> tmean,</span>
+<span id="cb22-16"><a href="#cb22-16"></a>        <span class="at">par =</span> par</span>
+<span id="cb22-17"><a href="#cb22-17"></a>      )</span>
+<span id="cb22-18"><a href="#cb22-18"></a>    )</span>
+<span id="cb22-19"><a href="#cb22-19"></a>  </span>
+<span id="cb22-20"><a href="#cb22-20"></a>  predictions <span class="ot">&lt;-</span> <span class="fu">left_join</span>(predictions, validation, <span class="at">by =</span> <span class="st">"year"</span>)</span>
+<span id="cb22-21"><a href="#cb22-21"></a>  </span>
+<span id="cb22-22"><a href="#cb22-22"></a>  rmse <span class="ot">&lt;-</span> predictions <span class="sc">|&gt;</span></span>
+<span id="cb22-23"><a href="#cb22-23"></a>    <span class="fu">summarise</span>(</span>
+<span id="cb22-24"><a href="#cb22-24"></a>      <span class="at">rmse =</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((predictions <span class="sc">-</span> doy)<span class="sc">^</span><span class="dv">2</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb22-25"><a href="#cb22-25"></a>    ) <span class="sc">|&gt;</span></span>
+<span id="cb22-26"><a href="#cb22-26"></a>    <span class="fu">pull</span>(rmse)</span>
+<span id="cb22-27"><a href="#cb22-27"></a>  </span>
+<span id="cb22-28"><a href="#cb22-28"></a>  <span class="co"># return rmse value</span></span>
+<span id="cb22-29"><a href="#cb22-29"></a>  <span class="fu">return</span>(rmse)</span>
+<span id="cb22-30"><a href="#cb22-30"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="simulated-annealing" class="slide level2">
 <h2>Simulated annealing</h2>
 
 <img data-src="images/SANN.gif" style="width:100.0%" class="r-stretch quarto-figure-center"></section>
-<section id="model-optimization" class="slide level2">
-<h2>Model optimization</h2>
+<section id="section-20" class="slide level2">
+<h2></h2>
+<p>Combine the data and run the optimization</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21" data-code-line-numbers="|1-4|7-15|"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>data <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
-<span id="cb21-2"><a href="#cb21-2"></a>  <span class="at">drivers =</span> harvard_temp,</span>
-<span id="cb21-3"><a href="#cb21-3"></a>  <span class="at">validation =</span> harvard_phenology</span>
-<span id="cb21-4"><a href="#cb21-4"></a>  )</span>
-<span id="cb21-5"><a href="#cb21-5"></a></span>
-<span id="cb21-6"><a href="#cb21-6"></a><span class="co"># optimize the model parameters</span></span>
-<span id="cb21-7"><a href="#cb21-7"></a>optim_par <span class="ot">=</span> GenSA<span class="sc">::</span><span class="fu">GenSA</span>(</span>
-<span id="cb21-8"><a href="#cb21-8"></a> <span class="at">data =</span> data,</span>
-<span id="cb21-9"><a href="#cb21-9"></a> <span class="at">fn =</span> rmse_gdd,</span>
-<span id="cb21-10"><a href="#cb21-10"></a> <span class="at">lower =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">10</span>,<span class="dv">0</span>),</span>
-<span id="cb21-11"><a href="#cb21-11"></a> <span class="at">upper =</span> <span class="fu">c</span>(<span class="dv">45</span>,<span class="dv">500</span>),</span>
-<span id="cb21-12"><a href="#cb21-12"></a> <span class="at">control =</span> <span class="fu">list</span>(</span>
-<span id="cb21-13"><a href="#cb21-13"></a>   <span class="at">max.call =</span> <span class="dv">4000</span></span>
-<span id="cb21-14"><a href="#cb21-14"></a>   )</span>
-<span id="cb21-15"><a href="#cb21-15"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23" data-code-line-numbers="|1-4|7-15|8|9|10-11|12-14|"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a>data <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb23-2"><a href="#cb23-2"></a>  <span class="at">drivers =</span> harvard_temp,</span>
+<span id="cb23-3"><a href="#cb23-3"></a>  <span class="at">validation =</span> harvard_phenology</span>
+<span id="cb23-4"><a href="#cb23-4"></a>  )</span>
+<span id="cb23-5"><a href="#cb23-5"></a></span>
+<span id="cb23-6"><a href="#cb23-6"></a><span class="co"># optimize the model parameters</span></span>
+<span id="cb23-7"><a href="#cb23-7"></a>optim_par <span class="ot">=</span> GenSA<span class="sc">::</span><span class="fu">GenSA</span>(</span>
+<span id="cb23-8"><a href="#cb23-8"></a> <span class="at">data =</span> data,</span>
+<span id="cb23-9"><a href="#cb23-9"></a> <span class="at">fn =</span> rmse_gdd,</span>
+<span id="cb23-10"><a href="#cb23-10"></a> <span class="at">lower =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">10</span>,<span class="dv">0</span>),</span>
+<span id="cb23-11"><a href="#cb23-11"></a> <span class="at">upper =</span> <span class="fu">c</span>(<span class="dv">45</span>,<span class="dv">500</span>),</span>
+<span id="cb23-12"><a href="#cb23-12"></a> <span class="at">control =</span> <span class="fu">list</span>(</span>
+<span id="cb23-13"><a href="#cb23-13"></a>   <span class="at">max.call =</span> <span class="dv">4000</span></span>
+<span id="cb23-14"><a href="#cb23-14"></a>   )</span>
+<span id="cb23-15"><a href="#cb23-15"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Print the optimal parameters</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="fu">print</span>(optim_par<span class="sc">$</span>par)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a><span class="fu">print</span>(optim_par<span class="sc">$</span>par)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1]   2.788634 229.785190</code></pre>
+<pre><code>[1]   2.667092 235.700891</code></pre>
 </div>
 </div>
 </section>
 <section id="model-predictions" class="slide level2">
 <h2>Model predictions</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a><span class="co"># run the model for all years</span></span>
-<span id="cb24-2"><a href="#cb24-2"></a><span class="co"># to get the phenology predictions</span></span>
-<span id="cb24-3"><a href="#cb24-3"></a>predictions <span class="ot">&lt;-</span> harvard_temp <span class="sc">|&gt;</span></span>
-<span id="cb24-4"><a href="#cb24-4"></a>  <span class="fu">group_by</span>(year) <span class="sc">|&gt;</span></span>
-<span id="cb24-5"><a href="#cb24-5"></a>  <span class="fu">summarize</span>(</span>
-<span id="cb24-6"><a href="#cb24-6"></a>   <span class="at">prediction =</span> <span class="fu">gdd_model</span>(</span>
-<span id="cb24-7"><a href="#cb24-7"></a>    <span class="at">temp =</span> tmean,</span>
-<span id="cb24-8"><a href="#cb24-8"></a>    <span class="at">par =</span> optim_par<span class="sc">$</span>par</span>
-<span id="cb24-9"><a href="#cb24-9"></a>  )  </span>
-<span id="cb24-10"><a href="#cb24-10"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a><span class="co"># run the model for all years</span></span>
+<span id="cb26-2"><a href="#cb26-2"></a><span class="co"># to get the phenology predictions</span></span>
+<span id="cb26-3"><a href="#cb26-3"></a>predictions <span class="ot">&lt;-</span> harvard_temp <span class="sc">|&gt;</span></span>
+<span id="cb26-4"><a href="#cb26-4"></a>  <span class="fu">group_by</span>(year) <span class="sc">|&gt;</span></span>
+<span id="cb26-5"><a href="#cb26-5"></a>  <span class="fu">summarize</span>(</span>
+<span id="cb26-6"><a href="#cb26-6"></a>   <span class="at">prediction =</span> <span class="fu">gdd_model</span>(</span>
+<span id="cb26-7"><a href="#cb26-7"></a>    <span class="at">temp =</span> tmean,</span>
+<span id="cb26-8"><a href="#cb26-8"></a>    <span class="at">par =</span> optim_par<span class="sc">$</span>par</span>
+<span id="cb26-9"><a href="#cb26-9"></a>  )  </span>
+<span id="cb26-10"><a href="#cb26-10"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="model-predictions---plot" class="slide level2">
-<h2>Model predictions - plot</h2>
+<section id="section-21" class="slide level2">
+<h2></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a><span class="fu">print</span>(<span class="fu">head</span>(predictions))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a><span class="fu">print</span>(<span class="fu">head</span>(predictions))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 2
    year prediction
   &lt;dbl&gt;      &lt;int&gt;
 1  2008        128
 2  2009        125
-3  2010        119
+3  2010        120
 4  2011        131
 5  2012        115
 6  2013        130</code></pre>
 </div>
 </div>
 </section>
-<section id="model-predictions---plot-1" class="slide level2">
-<h2>Model predictions - plot</h2>
+<section id="section-22" class="slide level2">
+<h2></h2>
 <div class="columns" data-align="center">
 <div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a>validation <span class="ot">&lt;-</span> <span class="fu">left_join</span>(</span>
-<span id="cb27-2"><a href="#cb27-2"></a>  predictions, </span>
-<span id="cb27-3"><a href="#cb27-3"></a>  harvard_phenology</span>
-<span id="cb27-4"><a href="#cb27-4"></a>)</span>
-<span id="cb27-5"><a href="#cb27-5"></a></span>
-<span id="cb27-6"><a href="#cb27-6"></a><span class="fu">ggplot</span>(validation) <span class="sc">+</span></span>
-<span id="cb27-7"><a href="#cb27-7"></a>  <span class="fu">geom_smooth</span>(</span>
-<span id="cb27-8"><a href="#cb27-8"></a>    <span class="fu">aes</span>(doy, prediction),</span>
-<span id="cb27-9"><a href="#cb27-9"></a>    <span class="at">method =</span> <span class="st">"lm"</span></span>
-<span id="cb27-10"><a href="#cb27-10"></a>  ) <span class="sc">+</span></span>
-<span id="cb27-11"><a href="#cb27-11"></a>  <span class="fu">geom_point</span>(</span>
-<span id="cb27-12"><a href="#cb27-12"></a>    <span class="fu">aes</span>(doy, prediction)</span>
-<span id="cb27-13"><a href="#cb27-13"></a>  ) <span class="sc">+</span></span>
-<span id="cb27-14"><a href="#cb27-14"></a>  <span class="fu">geom_abline</span>(</span>
-<span id="cb27-15"><a href="#cb27-15"></a>    <span class="at">intercept=</span><span class="dv">0</span>, <span class="at">slope=</span><span class="dv">1</span></span>
-<span id="cb27-16"><a href="#cb27-16"></a>    ) <span class="sc">+</span></span>
-<span id="cb27-17"><a href="#cb27-17"></a>  <span class="fu">labs</span>(</span>
-<span id="cb27-18"><a href="#cb27-18"></a>    <span class="at">x =</span> <span class="st">"Observed (DOY)"</span>,</span>
-<span id="cb27-19"><a href="#cb27-19"></a>    <span class="at">y =</span> <span class="st">"Predicted (DOY)"</span></span>
-<span id="cb27-20"><a href="#cb27-20"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a>validation <span class="ot">&lt;-</span> <span class="fu">left_join</span>(</span>
+<span id="cb29-2"><a href="#cb29-2"></a>  predictions, </span>
+<span id="cb29-3"><a href="#cb29-3"></a>  harvard_phenology</span>
+<span id="cb29-4"><a href="#cb29-4"></a>)</span>
+<span id="cb29-5"><a href="#cb29-5"></a></span>
+<span id="cb29-6"><a href="#cb29-6"></a><span class="fu">ggplot</span>(validation) <span class="sc">+</span></span>
+<span id="cb29-7"><a href="#cb29-7"></a>  <span class="fu">geom_smooth</span>(</span>
+<span id="cb29-8"><a href="#cb29-8"></a>    <span class="fu">aes</span>(doy, prediction),</span>
+<span id="cb29-9"><a href="#cb29-9"></a>    <span class="at">method =</span> <span class="st">"lm"</span></span>
+<span id="cb29-10"><a href="#cb29-10"></a>  ) <span class="sc">+</span></span>
+<span id="cb29-11"><a href="#cb29-11"></a>  <span class="fu">geom_point</span>(</span>
+<span id="cb29-12"><a href="#cb29-12"></a>    <span class="fu">aes</span>(doy, prediction)</span>
+<span id="cb29-13"><a href="#cb29-13"></a>  ) <span class="sc">+</span></span>
+<span id="cb29-14"><a href="#cb29-14"></a>  <span class="fu">geom_abline</span>(</span>
+<span id="cb29-15"><a href="#cb29-15"></a>    <span class="at">intercept=</span><span class="dv">0</span>, <span class="at">slope=</span><span class="dv">1</span></span>
+<span id="cb29-16"><a href="#cb29-16"></a>    ) <span class="sc">+</span></span>
+<span id="cb29-17"><a href="#cb29-17"></a>  <span class="fu">labs</span>(</span>
+<span id="cb29-18"><a href="#cb29-18"></a>    <span class="at">x =</span> <span class="st">"Observed (DOY)"</span>,</span>
+<span id="cb29-19"><a href="#cb29-19"></a>    <span class="at">y =</span> <span class="st">"Predicted (DOY)"</span></span>
+<span id="cb29-20"><a href="#cb29-20"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:50%;">
 <div class="cell">
 <div class="cell-output-display">
-<p><img data-src="phenology_workshop_files/figure-revealjs/unnamed-chunk-32-1.png" width="960"></p>
+<p><img data-src="phenology_workshop_files/figure-revealjs/unnamed-chunk-36-1.png" width="960"></p>
 </div>
 </div>
 </div>
@@ -1081,68 +1290,68 @@ F-statistic: 2.89e+05 on 1 and 145522 DF,  p-value: &lt; 2.2e-16</code></pre>
 <div class="columns" data-align="center">
 <div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a><span class="co"># Download daily data</span></span>
-<span id="cb28-2"><a href="#cb28-2"></a>daymetr<span class="sc">::</span><span class="fu">download_daymet_tiles</span>(</span>
-<span id="cb28-3"><a href="#cb28-3"></a>  <span class="at">tiles =</span> <span class="dv">11935</span>,</span>
-<span id="cb28-4"><a href="#cb28-4"></a>  <span class="at">start =</span> <span class="dv">2012</span>,</span>
-<span id="cb28-5"><a href="#cb28-5"></a>  <span class="at">end =</span> <span class="dv">2012</span>,</span>
-<span id="cb28-6"><a href="#cb28-6"></a>  <span class="at">param =</span> <span class="fu">c</span>(<span class="st">"tmin"</span>,<span class="st">"tmax"</span>),</span>
-<span id="cb28-7"><a href="#cb28-7"></a>  <span class="at">path =</span> <span class="fu">tempdir</span>(),</span>
-<span id="cb28-8"><a href="#cb28-8"></a>  <span class="at">silent =</span> <span class="cn">FALSE</span></span>
-<span id="cb28-9"><a href="#cb28-9"></a>  )</span>
-<span id="cb28-10"><a href="#cb28-10"></a></span>
-<span id="cb28-11"><a href="#cb28-11"></a><span class="co"># calculate the daily mean values</span></span>
-<span id="cb28-12"><a href="#cb28-12"></a>r <span class="ot">&lt;-</span> daymetr<span class="sc">::</span><span class="fu">daymet_grid_tmean</span>(</span>
-<span id="cb28-13"><a href="#cb28-13"></a>  <span class="at">path =</span> <span class="fu">tempdir</span>(),</span>
-<span id="cb28-14"><a href="#cb28-14"></a>  <span class="at">product =</span> <span class="dv">11935</span>,</span>
-<span id="cb28-15"><a href="#cb28-15"></a>  <span class="at">year =</span> <span class="dv">2012</span>,</span>
-<span id="cb28-16"><a href="#cb28-16"></a>  <span class="at">internal =</span> <span class="cn">TRUE</span></span>
-<span id="cb28-17"><a href="#cb28-17"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a><span class="co"># Download daily data</span></span>
+<span id="cb30-2"><a href="#cb30-2"></a>daymetr<span class="sc">::</span><span class="fu">download_daymet_tiles</span>(</span>
+<span id="cb30-3"><a href="#cb30-3"></a>  <span class="at">tiles =</span> <span class="dv">11935</span>,</span>
+<span id="cb30-4"><a href="#cb30-4"></a>  <span class="at">start =</span> <span class="dv">2012</span>,</span>
+<span id="cb30-5"><a href="#cb30-5"></a>  <span class="at">end =</span> <span class="dv">2012</span>,</span>
+<span id="cb30-6"><a href="#cb30-6"></a>  <span class="at">param =</span> <span class="fu">c</span>(<span class="st">"tmin"</span>,<span class="st">"tmax"</span>),</span>
+<span id="cb30-7"><a href="#cb30-7"></a>  <span class="at">path =</span> <span class="fu">tempdir</span>(),</span>
+<span id="cb30-8"><a href="#cb30-8"></a>  <span class="at">silent =</span> <span class="cn">FALSE</span></span>
+<span id="cb30-9"><a href="#cb30-9"></a>  )</span>
+<span id="cb30-10"><a href="#cb30-10"></a></span>
+<span id="cb30-11"><a href="#cb30-11"></a><span class="co"># calculate the daily mean values</span></span>
+<span id="cb30-12"><a href="#cb30-12"></a>r <span class="ot">&lt;-</span> daymetr<span class="sc">::</span><span class="fu">daymet_grid_tmean</span>(</span>
+<span id="cb30-13"><a href="#cb30-13"></a>  <span class="at">path =</span> <span class="fu">tempdir</span>(),</span>
+<span id="cb30-14"><a href="#cb30-14"></a>  <span class="at">product =</span> <span class="dv">11935</span>,</span>
+<span id="cb30-15"><a href="#cb30-15"></a>  <span class="at">year =</span> <span class="dv">2012</span>,</span>
+<span id="cb30-16"><a href="#cb30-16"></a>  <span class="at">internal =</span> <span class="cn">TRUE</span></span>
+<span id="cb30-17"><a href="#cb30-17"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a><span class="co"># reproject to lat lon</span></span>
-<span id="cb29-2"><a href="#cb29-2"></a>r <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">project</span>(</span>
-<span id="cb29-3"><a href="#cb29-3"></a>  r,</span>
-<span id="cb29-4"><a href="#cb29-4"></a>  <span class="st">"+init=epsg:4326"</span></span>
-<span id="cb29-5"><a href="#cb29-5"></a>)</span>
-<span id="cb29-6"><a href="#cb29-6"></a></span>
-<span id="cb29-7"><a href="#cb29-7"></a><span class="co"># subset to first 180 days (layers)</span></span>
-<span id="cb29-8"><a href="#cb29-8"></a>ma_nh_temp <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">subset</span>(</span>
-<span id="cb29-9"><a href="#cb29-9"></a>  r,</span>
-<span id="cb29-10"><a href="#cb29-10"></a>  <span class="dv">1</span><span class="sc">:</span><span class="dv">180</span></span>
-<span id="cb29-11"><a href="#cb29-11"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a><span class="co"># reproject to lat lon</span></span>
+<span id="cb31-2"><a href="#cb31-2"></a>r <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">project</span>(</span>
+<span id="cb31-3"><a href="#cb31-3"></a>  r,</span>
+<span id="cb31-4"><a href="#cb31-4"></a>  <span class="st">"+init=epsg:4326"</span></span>
+<span id="cb31-5"><a href="#cb31-5"></a>)</span>
+<span id="cb31-6"><a href="#cb31-6"></a></span>
+<span id="cb31-7"><a href="#cb31-7"></a><span class="co"># subset to first 180 days (layers)</span></span>
+<span id="cb31-8"><a href="#cb31-8"></a>ma_nh_temp <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">subset</span>(</span>
+<span id="cb31-9"><a href="#cb31-9"></a>  r,</span>
+<span id="cb31-10"><a href="#cb31-10"></a>  <span class="dv">1</span><span class="sc">:</span><span class="dv">180</span></span>
+<span id="cb31-11"><a href="#cb31-11"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
+</div>
+</section>
+<section id="section-23" class="slide level2">
+<h2></h2>
+<p>Download data:</p>
+<p>https://github.com/bluegreen-labs/handful_of_pixels/raw/main/data/daymet_mean_temperature.tif</p>
+<p><code>{terra}</code> allows loading remote data!!</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a>r <span class="ot">&lt;-</span> <span class="fu">rast</span>(<span class="st">"URL"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="spatial-scaling-1" class="slide level2">
 <h2>Spatial scaling</h2>
-<p>Download data:</p>
-<p>https://github.com/bluegreen-labs/handful_of_pixels/raw/main/data/daymet_mean_temperature.tif</p>
-<p><code>{terra}</code> allows loading remote data!!</p>
+<p>Run the model on the spatial data, plot the results</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a>predicted_phenology <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">app</span>(</span>
+<span id="cb33-2"><a href="#cb33-2"></a>  ma_nh_temp,</span>
+<span id="cb33-3"><a href="#cb33-3"></a>  <span class="at">fun =</span> gdd_model,</span>
+<span id="cb33-4"><a href="#cb33-4"></a>  <span class="at">par =</span> optim_par<span class="sc">$</span>par</span>
+<span id="cb33-5"><a href="#cb33-5"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
 <section id="spatial-scaling-2" class="slide level2">
 <h2>Spatial scaling</h2>
-<p>Run the model on the spatial data, plot the results</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a>predicted_phenology <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">app</span>(</span>
-<span id="cb30-2"><a href="#cb30-2"></a>  ma_nh_temp,</span>
-<span id="cb30-3"><a href="#cb30-3"></a>  <span class="at">fun =</span> gdd_model,</span>
-<span id="cb30-4"><a href="#cb30-4"></a>  <span class="at">par =</span> optim_par<span class="sc">$</span>par</span>
-<span id="cb30-5"><a href="#cb30-5"></a>)</span>
-<span id="cb30-6"><a href="#cb30-6"></a></span>
-<span id="cb30-7"><a href="#cb30-7"></a><span class="fu">plot</span>(predicted_phenology)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a><span class="fu">plot</span>(predicted_phenology)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="phenology_workshop_files/figure-revealjs/unnamed-chunk-35-1.png" width="960" class="r-stretch"></section>
-<section id="spatial-scaling-3" class="slide level2">
-<h2>Spatial scaling</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a><span class="fu">plot</span>(predicted_phenology)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-
-</div>
-<img data-src="phenology_workshop_files/figure-revealjs/unnamed-chunk-36-1.png" width="960" class="r-stretch"></section>
+<img data-src="phenology_workshop_files/figure-revealjs/unnamed-chunk-41-1.png" width="960" class="r-stretch"></section>
 <section id="full-course" class="slide level2">
 <h2>Full course</h2>
 <p>https://bluegreen-labs.github.io/handful_of_pixels/</p>

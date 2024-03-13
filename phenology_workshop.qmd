@@ -52,6 +52,97 @@ harvard_temp <- harvard_phenocam_data |>
   )
 ```
 
+## SLIDES
+
+https://khufkens.github.io/FAIR_phenological_modelling/phenology_workshop.html
+
+## {phenor}
+
+```{r}
+#| fig-align: "center"
+#| out-width: "100%"
+#| fig-cap: "https://bluegreen-labs.github.io/phenor/"
+#| echo: FALSE
+knitr::include_graphics("images/phenor.png")
+```
+
+## 
+
+:::: {.columns align=center}
+
+::: {.column width="50%"}
+
+Drivers
+
+- ERA5 / CMIP
+- Berkley Earth
+- DAYMET
+- NASA NEX (CMIP downscaled)*
+- E-OBS
+
+:::
+
+::: {.column width="50%"}
+
+Targets
+
+- US-NPN
+- PhenoCam
+- MODIS MCD12Q2
+- PEP725
+- custom formatting functions
+
+:::
+
+::::
+
+## {.smaller}
+
+:::: {.columns align=center}
+
+:::{.column width="50%"}
+
+Optimization supported by `{BayesianTools}`, optimizer zoo (with support for
+priors through the control function) and cross validation through
+`pr_cross_validate()`
+
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+
+optim_par <- phenor::pr_fit(
+  data = phenocam_DB,
+  model = "TT",
+  method = "BayesianTools",
+  control = list(
+    sampler = "DEzs",
+    settings = list(
+      burnin = 10,
+      iterations = 10000)
+    )
+)
+```
+:::
+
+:::{.column width="50%"}
+```{r}
+#| fig-align: "center"
+#| out-width: "100%"
+#| echo: FALSE
+knitr::include_graphics("images/parameters.png")
+```
+:::
+::::
+
+## 
+
+```{r}
+#| fig-align: "center"
+#| out-width: "100%"
+#| echo: FALSE
+knitr::include_graphics("images/sad.jpg")
+```
+
 ## Rational
 
 ::: {.incremental}
@@ -88,15 +179,15 @@ Note that these are toy examples, not best practices.
 #| eval: FALSE
 
 # if you need to install all of them first use
-install.packages(
-  c("tidyverse",
-    "geodata",
-    "MODISTools",
-    "phenocamr",
-    "terra",
-    "GenSA"
-    )
-  )
+# install.packages(
+#   c("tidyverse",
+#     "geodata",
+#     "MODISTools",
+#     "phenocamr",
+#     "terra",
+#     "GenSA"
+#     )
+#   )
 
 # load all the libraries up front
 library(tidyverse)
@@ -124,7 +215,7 @@ Two main libraries underpin geospatial processing in R (for the most part). This
 
 ```{r}
 #| fig-cap: "Image by [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Raster_vector_tikz.svg)"
-#| fig-align: "left"
+#| fig-align: "center"
 #| out-width: "100%"
 #| echo: FALSE
 knitr::include_graphics("images/Raster_vector_tikz.svg")
@@ -158,15 +249,11 @@ I will focus on one APIs `{MODISTools}`. But, `{ecmwfr}` and `{appeears}` allow 
   - hard to demo within a shorter time frame
 :::
 
-## Common data sources
+## APIs
 
 ::: {.incremental}
-- ECMWF Copernicus Data Services (CDS) `{ecmwfr}*`
-- NASA EarthData and digital archives `{MODISTools}*` & `{appeears}*`
-- National Ecosystem Observation Network (NEON) `{rnpn}`
-- PEP725 `{phenor}*`
-- ICOS `{icoscp}*` (partial support)
-- GBIF `{rgbif}`
+- ECMWF Copernicus Data Services (CDS) `{ecmwfr}`
+- NASA EarthData and digital archives `{MODISTools}` & `{appeears}`
 :::
 
 ## Common data sources
@@ -184,7 +271,7 @@ Scientific data repositories (open static data downloads or deposits)
 ```{r}
 #| echo: TRUE
 #| eval: FALSE
-#| code-line-numbers: "|1|3-7|9-14|"
+#| code-line-numbers: "|1-5|7-11|"
 geodata::elevation_3s(
     lat = 46.6756,
     lon = 7.85480,
@@ -199,7 +286,7 @@ dem <- terra::rast(
 )
 ```
 
-## Downloading DEM SRTM data
+## 
 
 ```{r}
 #| echo: FALSE
@@ -207,7 +294,9 @@ dem <- terra::rast(
 plot(dem)
 ```
 
-## Downloading MODIS data
+## 
+
+Listing data
 
 ```{r}
 #| echo: TRUE
@@ -216,15 +305,14 @@ plot(dem)
 MODISTools::mt_products()
 ```
 
-## Downloading MODIS data
-### listing products
+## 
 
-```{r eval=FALSE}
+```{r}
+#| eval: TRUE
 MODISTools::mt_products()
 ```
 
 ## Downloading MODIS data
-### grab the data
 
 ```{r}
 #| echo: TRUE
@@ -246,14 +334,24 @@ phenology <- MODISTools::mt_subset(
 )
 ```
 
-## Downloading MODIS data
-### grab the data
+## 
 
 If downloads are too slow data can be downloaded from:
 https://github.com/bluegreen-labs/handful_of_pixels/raw/main/data/phenology_2012.rds
 
-## Downloading MODIS data
-### reformatting
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+
+download.file(
+  "https://github.com/bluegreen-labs/handful_of_pixels/raw/main/data/phenology_2012.rds",
+  destfile = file.path(tempdir(),"phenology_2012.rds")
+)
+
+phenology <- readRDS(file.path(tempdir(),"phenology_2012.rds"))
+```
+
+## 
 
 Converting the dates, and the format
 
@@ -276,8 +374,7 @@ phenology_raster <- MODISTools::mt_to_terra(
 
 ```
 
-## Downloading MODIS data
-### data vizualization
+## 
 
 Visualizing the data!
 
@@ -288,7 +385,9 @@ Visualizing the data!
 plot(phenology_raster)
 ```
 
-## Resample
+## 
+
+Resampling DEM for comparison
 
 ```{r}
 #| echo: TRUE
@@ -308,7 +407,9 @@ dem <- terra::mask(
 )
 ```
 
-## Combine data
+## 
+
+Combine data in one dataframe!
 
 ```{r}
 #| echo: TRUE
@@ -320,7 +421,7 @@ sct_df <- data.frame(
   )
 ```
 
-## Plot the data
+## 
 
 :::: {.columns align=center}
 
@@ -385,7 +486,7 @@ ggplot(data = sct_df, aes(altitude,doy)) +
 
 ::::
 
-## Summary stats {.smaller}
+## {.smaller}
 
 ```{r}
 #| echo: TRUE
@@ -398,7 +499,7 @@ Hopkins Law (four days / 400ft (120 m))
 
 ## Phenology modelling
 
-Convert dates
+Download time series, calculate phenophases
 
 ```{r}
 #| echo: TRUE
@@ -420,7 +521,9 @@ phenocamr::download_phenocam(
 This routine downloads the phenocam data for the deciduous broadleaf class, calculates the phenophases, and aligns the data with matching daymet data. I'll use the daymet data in modelling. Although US centric the same routines apply for EU based modelling efforts. I fall back on DAYMET data for the ease of use.
 :::
 
-## Phenology modelling
+## 
+
+Read the data
 
 ```{r}
 #| echo: TRUE
@@ -441,7 +544,7 @@ harvard_temp <- harvard_phenocam_data |>
   )
 ```
 
-## Phenology modelling
+## 
 
 ```{r}
 #| echo: TRUE
@@ -465,9 +568,9 @@ harvard_phenology <- readr::read_csv(
 This routine reads in the time series and calculated phenology dates, filtering out only the relevant spring characteristics.
 :::
 
-## Phenology modelling
+## 
 
-Select threshold days
+Select phenophase and convert to year, doy
 
 ```{r}
 #| echo: TRUE
@@ -486,7 +589,9 @@ harvard_phenology <- harvard_phenology |>
     )
 ```
 
-## Phenology model
+## 
+
+Define the GDD model
 
 ```{r}
 #| echo: TRUE
@@ -518,9 +623,9 @@ gdd_model <- function(temp, par) {
 Here I formulate a simple growing degree day model. With temperature as input, together with a list of parameters `par`, the threshold temperature and F* the critical growing degree days if exceeded should trigger phenology.
 :::
 
-## Phenology model
+## 
 
-Fixed parameters
+Run with fixed parameters
 
 ```{r}
 #| echo: TRUE
@@ -541,7 +646,7 @@ prediction <- harvard_temp |>
 We can now run the model on our data using a simple call, with ad-hoc parameters, say a temperature threshold of 5 degrees C, and a GDD F* threshold of 130. However, these parameters are ad-hoc and not optimized for our current dataset. To do so we need to find the optimal parameters for this problem. This will require... parameter optimization.
 :::
 
-## Phenology model
+## 
 
 ```{r}
 #| echo: FALSE
@@ -562,7 +667,9 @@ prediction <- harvard_temp |>
 print(prediction)
 ```
 
-## Cost function
+## 
+
+Defining a cost function
 
 ```{r}
 #| echo: TRUE
@@ -611,12 +718,14 @@ rmse_gdd <- function(par, data) {
 knitr::include_graphics("images/SANN.gif")
 ```
 
-## Model optimization
+## 
+
+Combine the data and run the optimization
 
 ```{r}
 #| echo: TRUE
 #| eval: FALSE
-#| code-line-numbers: "|1-4|7-15|"
+#| code-line-numbers: "|1-4|7-15|8|9|10-11|12-14|"
 
 data <- list(
   drivers = harvard_temp,
@@ -683,7 +792,7 @@ predictions <- harvard_temp |>
   )
 ```
 
-## Model predictions - plot
+## 
 
 ```{r}
 #| echo: TRUE
@@ -692,7 +801,7 @@ predictions <- harvard_temp |>
 print(head(predictions))
 ```
 
-## Model predictions - plot
+## 
 
 :::: {.columns align=center}
 
@@ -815,13 +924,19 @@ ma_nh_temp <- terra::subset(
 :::
 ::::
 
-## Spatial scaling
+## 
 
 Download data:
 
 https://github.com/bluegreen-labs/handful_of_pixels/raw/main/data/daymet_mean_temperature.tif
 
 `{terra}` allows loading remote data!!
+
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+r <- rast("URL")
+```
 
 ## Spatial scaling
 
