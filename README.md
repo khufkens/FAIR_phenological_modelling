@@ -5,4 +5,4 @@ Dynamic research notes and workshop presentations of the FAIR phenological model
 
 ## Acknowledgement
 
-These materials were is part supported by the LEMONTREE project, funded by Schmidt Futures and under the umbrella of the Virtual Earth System Research Institute (VESRI). Tool development of among others `{MODISTools}`, `{ecmwfr}`, `{appeears}`, `{phenocamr}` was supported through [BlueGreen Labs](https://bluegreenlabs.org/).
+These materials were is part supported by the LEMONTREE project, funded by Schmidt Futures and under the umbrella of the Virtual Earth System Research Institute (VESRI). Tool development of among others `{MODISTools}`, `{ecmwfr}`, `{appeears}`, `{phenocamr}` was supported through [BlueGreen Labs](https://bluegreenlabs.org/). Thanks go out to the Lorentz Center for hosting the workshop and providing the infrastructure necessary. 
